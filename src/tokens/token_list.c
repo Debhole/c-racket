@@ -2,7 +2,6 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include <string.h>
 
 token_list_t token_list_new() {
     int capacity = 8;

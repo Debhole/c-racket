@@ -2,6 +2,7 @@
 
 #include "token_type.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -10,6 +11,18 @@ token_t token_new(token_type_t type, int line) {
             .type = type,
             .data = NULL,
             .line = line};
+}
+
+void token_free(token_t *token) {
+    if (token == NULL) {
+        return;
+    }
+
+    if (token->data != NULL) {
+        free(token->data);
+    }
+    token->data = NULL;
+    token->line = 0;
 }
 
 token_t token_string(const char *value, int line) {
@@ -57,14 +70,26 @@ token_t token_symbol(const char *value, int line) {
     };
 }
 
-void token_free(token_t *token) {
-    if (token == NULL) {
-        return;
-    }
+void token_print(const token_t *t) {
+    const char *token_type = token_type_to_string(t->type);
 
-    if (token->data != NULL) {
-        free(token->data);
+    switch (t->type) {
+        case TOKEN_STRING:
+            printf("[%s -\"%s\" - Line %d ]\n", token_type, (const char *)t->data, t->line);
+            break;
+        case TOKEN_NUMBER:
+            printf("[%s - %f - Line %d]\n", token_type, *(double *)t->data, t->line);
+            break;
+        case TOKEN_BOOLEAN: {
+            const char *value = *(bool *)t->data ? "#true" : "#false";
+            printf("[%s - %s - Line %d]\n", token_type, value, t->line);
+            break;
+        }
+        case TOKEN_SYMBOL:
+            printf("[%s - '%s - Line %d]\n", token_type, (const char *)t->data, t->line);
+            break;
+        default:
+            printf("[%s - Line %d]\n", token_type, t->line);
+            break;
     }
-    token->data = NULL;
-    token->line = 0;
 }
