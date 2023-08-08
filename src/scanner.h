@@ -16,8 +16,10 @@ void scanner_free(scanner_t *s);
 
 token_list_t scanner_get_tokens(scanner_t *s);
 token_t scanner_next_token(scanner_t *s);
+token_t scanner_next_number(scanner_t *s);
 
 char scanner_peek(scanner_t *s);
+char scanner_peek_two(scanner_t *s);
 char scanner_advance(scanner_t *s);
 char scanner_advance_line(scanner_t *s);
 bool scanner_consume_whitespace(scanner_t *s);

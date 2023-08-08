@@ -12,7 +12,7 @@ typedef enum token_type_t {
     TOKEN_SYMBOL,
 
     TOKEN_EOF,
-    TOKEN_UNKNOWN,
+    TOKEN_ERROR,
 } token_type_t;
 
 inline const char *token_type_to_string(token_type_t token) {
@@ -31,7 +31,7 @@ inline const char *token_type_to_string(token_type_t token) {
             return "Symbol";
         case TOKEN_EOF:
             return "End of File";
-        case TOKEN_UNKNOWN:
-            return "Unknown";
+        case TOKEN_ERROR:
+            return "Error";
     }
 }

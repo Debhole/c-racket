@@ -70,6 +70,18 @@ token_t token_symbol(const char *value, int line) {
     };
 }
 
+token_t token_error(const char *value, int line) {
+    size_t size = strlen(value) + 1;
+    void *data = malloc(size);
+    memcpy(data, value, size);
+
+    return (token_t){
+        .type = TOKEN_ERROR,
+        .data = data,
+        .line = line,
+    };
+}
+
 void token_print(const token_t *t) {
     const char *token_type = token_type_to_string(t->type);
 

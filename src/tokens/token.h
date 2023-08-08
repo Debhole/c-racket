@@ -17,5 +17,6 @@ token_t token_string(const char *value, int line);
 token_t token_number(double value, int line);
 token_t token_boolean(bool value, int line);
 token_t token_symbol(const char *value, int line);
+token_t token_error(const char *value, int line);
 
 void token_print(const token_t *t);
