@@ -7,8 +7,8 @@
 typedef struct scanner_t {
     char *source;
     size_t len;
-    int loc;
-    int line;
+    unsigned int loc;
+    unsigned int line;
 } scanner_t;
 
 scanner_t scanner_new(const char *source);
@@ -26,14 +26,20 @@ token_list_t scanner_get_tokens(scanner_t *s);
 /// \return True if there was another token, False if there was not
 bool scanner_try_next_token(scanner_t *s, token_t *t);
 
+bool scanner_try_next_string(scanner_t *s, token_t *t);
+
 bool scanner_at_end(scanner_t *s);
 
 char scanner_peek(scanner_t *s);
+
+char scanner_peek_two(scanner_t *s);
 
 /// Advances to the next character
 /// \param s A pointer to the scanner to use
 /// \return The next character
 char scanner_advance(scanner_t *s);
+
+bool scanner_str_advance(scanner_t *s, char *c);
 
 void scanner_jump_endl(scanner_t *s);
 

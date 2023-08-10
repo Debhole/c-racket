@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-token_t token_new(token_type_t type, int line) {
+token_t token_new(token_type_t type, unsigned int line) {
     return (token_t){
             .type = type,
             .data = NULL,
@@ -25,7 +25,7 @@ void token_free(token_t *token) {
     token->line = 0;
 }
 
-token_t token_string(const char *value, int line) {
+token_t token_string(const char *value, unsigned int line) {
     size_t size = strlen(value) + 1;
     void *data = malloc(size);
     memcpy(data, value, size);
@@ -37,7 +37,7 @@ token_t token_string(const char *value, int line) {
     };
 }
 
-token_t token_number(double value, int line) {
+token_t token_number(double value, unsigned int line) {
     void *data = malloc(sizeof(double));
     memcpy(data, &value, sizeof(double));
 
@@ -47,7 +47,7 @@ token_t token_number(double value, int line) {
         .line = line,
     };
 }
-token_t token_boolean(bool value, int line) {
+token_t token_boolean(bool value, unsigned int line) {
     void *data = malloc(sizeof(bool));
     memcpy(data, &value, sizeof(bool));
 
@@ -58,7 +58,7 @@ token_t token_boolean(bool value, int line) {
     };
 }
 
-token_t token_symbol(const char *value, int line) {
+token_t token_symbol(const char *value, unsigned int line) {
     size_t size = strlen(value) + 1;
     void *data = malloc(size);
     memcpy(data, value, size);
@@ -70,7 +70,7 @@ token_t token_symbol(const char *value, int line) {
     };
 }
 
-token_t token_error(const char *value, int line) {
+token_t token_error(const char *value, unsigned int line) {
     size_t size = strlen(value) + 1;
     void *data = malloc(size);
     memcpy(data, value, size);
