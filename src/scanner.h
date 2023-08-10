@@ -14,14 +14,31 @@ typedef struct scanner_t {
 scanner_t scanner_new(const char *source);
 void scanner_free(scanner_t *s);
 
+/// Get all tokens from the scanner
+/// \param s The scanner
+/// \return A list of tokens from the scanner
 token_list_t scanner_get_tokens(scanner_t *s);
-token_t scanner_next_token(scanner_t *s);
-token_t scanner_next_number(scanner_t *s);
+
+/// Attempts to parse the next token from the source file. Modifies
+/// the token_t pointer only if it found another token.
+/// \param s A pointer to the scanner to use
+/// \param t A pointer to the token to set
+/// \return True if there was another token, False if there was not
+bool scanner_try_next_token(scanner_t *s, token_t *t);
+
+bool scanner_at_end(scanner_t *s);
 
 char scanner_peek(scanner_t *s);
-char scanner_peek_two(scanner_t *s);
-char scanner_advance(scanner_t *s);
-char scanner_advance_line(scanner_t *s);
-bool scanner_consume_whitespace(scanner_t *s);
 
-bool scanner_has_next(scanner_t *s);
+/// Advances to the next character
+/// \param s A pointer to the scanner to use
+/// \return The next character
+char scanner_advance(scanner_t *s);
+
+void scanner_jump_endl(scanner_t *s);
+
+/// Returns whether the given character is a delimiter or not. The following
+/// characters are delimiters: ( ) [ ] { } , ' ` " ; and whitespace and BOM character
+/// \param c The character to compare
+/// \return Whether or not the given character is a delimiter
+bool is_delimiter(char c);

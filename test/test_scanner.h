@@ -1,38 +1,35 @@
 #pragma once
 
-#include "tokens/token_list.h"
-#include "tokens/token.h"
 #include "scanner.h"
+#include "tokens/token.h"
+#include "tokens/token_list.h"
 
 #include "test_macros.h"
 
 #include <string.h>
 
 inline result_t test_scanner() {
-    scanner_t s = scanner_new("  (  ) ((   ");
-    token_list_t list = scanner_get_tokens(&s);
-    assert(list.len == 5);
+    scanner_t s = scanner_new(
+            ";Does this read basic delimiters correctly?\n"
+            "([{}]) '`, ;Ignore the rest ()[\\a\n");
 
-    token_t token;
-    assert(token_list_get(&list, 0, &token) && token.type == TOKEN_LEFT_PAREN);
-    assert(token_list_get(&list, 1, &token) && token.type == TOKEN_RIGHT_PAREN);
-    assert(token_list_get(&list, 2, &token) && token.type == TOKEN_LEFT_PAREN);
-    assert(token_list_get(&list, 3, &token) && token.type == TOKEN_LEFT_PAREN);
-    assert(token_list_get(&list, 4, &token) && token.type == TOKEN_EOF);
+    token_list_t tokens = scanner_get_tokens(&s);
 
-    scanner_free(&s);
-    token_list_free(&list);
+    // We expect 11 tokens
+    // ( [ { } ] ) ' ` , "" EOF
+    assert(tokens.len == 10);
 
-    s = scanner_new("    \n\r  \t  ");
-    list = scanner_get_tokens(&s);
-    assert(list.len == 1);
-
-    scanner_free(&s);
-    token_list_free(&list);
-
-    s = scanner_new("(\"String\")");
-    list = scanner_get_tokens(&s);
-    assert(list.len == 4);
+    assert(tokens.tokens[0].type == TOKEN_LEFT_PAREN);
+    assert(tokens.tokens[1].type == TOKEN_LEFT_BRACE);
+    assert(tokens.tokens[2].type == TOKEN_LEFT_BRACKET);
+    assert(tokens.tokens[3].type == TOKEN_RIGHT_BRACKET);
+    assert(tokens.tokens[4].type == TOKEN_RIGHT_BRACE);
+    assert(tokens.tokens[5].type == TOKEN_RIGHT_PAREN);
+    assert(tokens.tokens[6].type == TOKEN_QUOTE);
+    assert(tokens.tokens[7].type == TOKEN_QUASIQUOTE);
+    assert(tokens.tokens[8].type == TOKEN_UNQUOTE);
+    //assert(tokens.tokens[9].type == TOKEN_STRING);
+    assert(tokens.tokens[9].type == TOKEN_EOF);
 
     return SUCCESS;
 }

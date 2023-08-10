@@ -100,6 +100,8 @@ void token_print(const token_t *t) {
         case TOKEN_SYMBOL:
             printf("[%s - '%s - Line %d]\n", token_type, (const char *)t->data, t->line);
             break;
+        case TOKEN_ERROR:
+            printf("[%s - '%s - Line %d]\n", token_type, (const char *)t->data, t->line);
         default:
             printf("[%s - Line %d]\n", token_type, t->line);
             break;
