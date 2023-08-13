@@ -66,5 +66,35 @@ inline result_t test_scanner_strings() {
     assert(strcmp(tokens.tokens[1].data, "Does \"this\" show up \\correctly\\?") == 0);
     assert(strcmp(tokens.tokens[2].data, "How about these? \'\a\b\t\n\v\f\r\'") == 0);
 
+    scanner_free(&s);
+    token_list_free(&tokens);
+
+    return SUCCESS;
+}
+
+inline result_t test_scanner_bools() {
+    scanner_t s = scanner_new("#true(#t)#T #f'#false`#F");
+    token_list_t tokens = scanner_get_tokens(&s);
+
+    assert(tokens.len == 11);
+
+    assert(tokens.tokens[0].type == TOKEN_BOOLEAN);
+    assert(* (bool *)tokens.tokens[0].data == true);
+    assert(* (bool *)tokens.tokens[2].data == true);
+    assert(* (bool *)tokens.tokens[4].data == true);
+
+    assert(tokens.tokens[5].type == TOKEN_BOOLEAN);
+    assert(* (bool *)tokens.tokens[5].data == false);
+    assert(* (bool *)tokens.tokens[7].data == false);
+    assert(* (bool *)tokens.tokens[9].data == false);
+
+    assert(tokens.tokens[1].type == TOKEN_LEFT_PAREN);
+    assert(tokens.tokens[3].type == TOKEN_RIGHT_PAREN);
+    assert(tokens.tokens[6].type == TOKEN_QUOTE);
+    assert(tokens.tokens[8].type == TOKEN_QUASIQUOTE);
+
+    scanner_free(&s);
+    token_list_free(&tokens);
+
     return SUCCESS;
 }

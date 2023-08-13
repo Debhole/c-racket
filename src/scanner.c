@@ -94,6 +94,10 @@ bool scanner_try_next_token(scanner_t *s, token_t *t) {
         case '"':
             return scanner_try_next_string(s, t);
 
+        // Hash-delimited tokens
+        case '#':
+            return scanner_try_next_hash_delimited(s, t);
+
         default:
             return false;
     }
@@ -120,6 +124,70 @@ bool scanner_try_next_string(scanner_t *s, token_t *t) {
 
     buf[loc] = '\0';
     *t = token_string(buf, start_line);
+    return true;
+}
+
+bool scanner_try_next_hash_delimited(scanner_t *s, token_t *t) {
+    unsigned int start_line = s->line;
+    char next = scanner_peek(s);
+
+    char buf[2048];
+    unsigned int loc = 0;
+
+    switch (next) {
+        case '\\':
+            return false;
+
+        case 't':
+        case 'T': {
+            char datum[5];
+            bool success = scanner_try_next_datum(s, datum, sizeof datum);
+
+            if (success && (strcmp(datum, "t") == 0 || strcmp(datum, "T") == 0 || strcmp(datum, "true") == 0)) {
+                *t = token_boolean(true, start_line);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        case 'f':
+        case 'F': {
+            char datum[6];
+            bool success = scanner_try_next_datum(s, datum, sizeof datum);
+
+            if (success && (strcmp(datum, "f") == 0 || strcmp(datum, "F") == 0 || strcmp(datum, "false") == 0)) {
+                *t = token_boolean(false, start_line);
+                return true;
+            }
+
+            return false;
+        }
+        default:
+            return false;
+    }
+}
+
+bool scanner_try_next_datum(scanner_t *s, char *c, size_t size) {
+    char curr, next;
+
+    unsigned int loc = 0;
+
+    // Read until next delimiter
+    while (!is_delimiter(next = scanner_peek(s))) {
+        curr = scanner_advance(s);
+
+        if (curr == '\0') {
+            break;
+        } else if (loc >= size - 1) {
+            c[size - 1] = '\0';
+            return false;
+        } else {
+            c[loc] = curr;
+            loc += 1;
+        }
+    }
+
+    c[loc] = '\0';
     return true;
 }
 
@@ -189,7 +257,7 @@ bool scanner_str_advance(scanner_t *s, char *c) {
             if (value > 255) {
                 return false;
             } else {
-                *c = (char)value;
+                *c = (char) value;
                 return true;
             }
         }

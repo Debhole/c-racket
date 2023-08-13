@@ -13,6 +13,7 @@ int main() {
     record_test(test_token_list);
     record_test(test_scanner);
     record_test(test_scanner_strings);
+    record_test(test_scanner_bools);
     record_test(test_token);
 
     report_tests();

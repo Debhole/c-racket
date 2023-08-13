@@ -28,6 +28,10 @@ bool scanner_try_next_token(scanner_t *s, token_t *t);
 
 bool scanner_try_next_string(scanner_t *s, token_t *t);
 
+bool scanner_try_next_hash_delimited(scanner_t *s, token_t *t);
+
+bool scanner_try_next_datum(scanner_t *s, char * c, size_t size);
+
 bool scanner_at_end(scanner_t *s);
 
 char scanner_peek(scanner_t *s);
