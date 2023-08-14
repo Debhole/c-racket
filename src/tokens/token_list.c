@@ -43,7 +43,7 @@ bool token_list_push(token_list_t *list, token_t token) {
     return true;
 }
 
-bool token_list_get(token_list_t *list, int idx, token_t *token) {
+bool token_list_get(token_list_t *list, unsigned int idx, token_t *token) {
     if (idx >= list->len) {
         return false;
     } else {

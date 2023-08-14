@@ -12,11 +12,15 @@ typedef enum result_t {
         if (!(x)) return FAILURE; \
     } while (0)
 
-#define assert_streq(x, y) assert(strcmp(x, y) == 0)
+#define assert_streq(tokstr, str) assert(strcmp(tokstr, str) == 0)
 
-#define assert_symeq(x, y)          \
-    assert(x.type == TOKEN_SYMBOL); \
-    assert_streq((char *) x.data, y)
+#define assert_symeq(tok, str)        \
+    assert(tok.type == TOKEN_SYMBOL); \
+    assert_streq((char *) tok.data, str)
+
+#define assert_rationaleq(rnum, num, den)                         \
+    assert((*(rational_number_t *) rnum).numerator == num); \
+    assert((*(rational_number_t *) rnum).denominator == den)
 
 #define init_tests() int num_fails = 0
 
