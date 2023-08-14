@@ -20,6 +20,7 @@ token_t token_boolean(bool value, unsigned int line);
 token_t token_rational(rational_number_t num, unsigned int line);
 token_t token_real(real_number_t num, unsigned int line);
 token_t token_symbol(const char *name, unsigned int line);
+token_t token_keyword(const char *name, unsigned int line);
 token_t token_error(const char *value, unsigned int line);
 
 void token_print(const token_t *t);

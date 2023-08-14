@@ -19,6 +19,7 @@ typedef enum token_type_t {
     TOKEN_REAL,
     TOKEN_BOOLEAN,
     TOKEN_SYMBOL,
+    TOKEN_KEYWORD,
 
     TOKEN_EOF,
     TOKEN_ERROR,
@@ -53,6 +54,8 @@ inline const char *token_type_to_string(token_type_t type) {
             return "Boolean";
         case TOKEN_SYMBOL:
             return "Symbol";
+        case TOKEN_KEYWORD:
+            return "Keyword";
         case TOKEN_EOF:
             return "End of File";
         case TOKEN_ERROR:

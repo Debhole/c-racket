@@ -189,14 +189,14 @@ inline result_t test_scanner_all() {
     assert(tokens.tokens[2].type == TOKEN_LEFT_PAREN);
     assert(tokens.tokens[6].type == TOKEN_RIGHT_PAREN);
 
-    assert_symeq(tokens.tokens[1], "define");
+    assert_kweq(tokens.tokens[1], "define");
     assert_symeq(tokens.tokens[3], "str mul");
     assert_symeq(tokens.tokens[4], "str");
     assert_symeq(tokens.tokens[5], "int");
 
     // Line 2 - 7-8 - "(cond"
     assert(tokens.tokens[7].type == TOKEN_LEFT_PAREN);
-    assert_symeq(tokens.tokens[8], "cond");
+    assert_kweq(tokens.tokens[8], "cond");
 
     // Line 3 - 9-15 - "[(zero? int) ""]"
     assert(tokens.tokens[9].type == TOKEN_LEFT_BRACE);
@@ -212,7 +212,7 @@ inline result_t test_scanner_all() {
 
     // Line 4 - 16-17 - "[else"
     assert(tokens.tokens[16].type == TOKEN_LEFT_BRACE);
-    assert_symeq(tokens.tokens[17], "else");
+    assert_kweq(tokens.tokens[17], "else");
 
     // Line 5 - 18-33 - "(string-append str (str\ mul str (- int 1)))]))"
     assert(tokens.tokens[18].type == TOKEN_LEFT_PAREN);

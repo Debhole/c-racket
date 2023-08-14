@@ -1,4 +1,5 @@
 #include "scanner.h"
+#include "keyword.h"
 #include "number.h"
 #include "tokens/token_list.h"
 
@@ -106,7 +107,7 @@ bool scanner_try_next_token(scanner_t *s, token_t *t) {
             // delimiters, string literals, and hash-delimited tokens)
             s->loc -= 1;
 
-            return scanner_try_next_sym_num(s, t);
+            return scanner_try_next_symbol_or_name(s, t);
         }
     }
 }
@@ -175,11 +176,11 @@ bool scanner_try_next_hash_delimited(scanner_t *s, token_t *t) {
     }
 }
 
-bool scanner_try_next_sym_num(scanner_t *s, token_t *t) {
+bool scanner_try_next_symbol_or_name(scanner_t *s, token_t *t) {
     if (scanner_try_next_number(s, t)) {
         return true;
     } else {
-        return scanner_try_next_symbol(s, t);
+        return scanner_try_next_name(s, t);
     }
 }
 
@@ -206,9 +207,20 @@ bool scanner_try_next_number(scanner_t *s, token_t *t) {
     return false;
 }
 
-bool scanner_try_next_symbol(scanner_t *s, token_t *t) {
+bool scanner_try_next_name(scanner_t *s, token_t *t) {
     char buf[2048];
     unsigned int line = s->line;
+    unsigned int start_loc = s->loc;
+
+    if (scanner_try_next_datum(s, buf, sizeof buf)) {
+        if (is_keyword(buf)) {
+            *t = token_keyword(buf, line);
+            return true;
+
+        } else {
+            s->loc = start_loc;
+        }
+    }
 
     if (scanner_try_next_datum_fuzzy(s, buf, sizeof buf)) {
         *t = token_symbol(buf, line);

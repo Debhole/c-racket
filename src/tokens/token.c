@@ -1,7 +1,8 @@
 #include "token.h"
 
-#include "token_type.h"
+#include "keyword.h"
 #include "number.h"
+#include "token_type.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,9 +33,9 @@ token_t token_string(const char *value, unsigned int line) {
     memcpy(data, value, size);
 
     return (token_t){
-        .type = TOKEN_STRING,
-        .data = data,
-        .line = line,
+            .type = TOKEN_STRING,
+            .data = data,
+            .line = line,
     };
 }
 
@@ -43,9 +44,9 @@ token_t token_boolean(bool value, unsigned int line) {
     memcpy(data, &value, sizeof(bool));
 
     return (token_t){
-        .type = TOKEN_BOOLEAN,
-        .data = data,
-        .line = line,
+            .type = TOKEN_BOOLEAN,
+            .data = data,
+            .line = line,
     };
 }
 
@@ -54,9 +55,9 @@ token_t token_rational(rational_number_t num, unsigned int line) {
     memcpy(data, &num, sizeof(rational_number_t));
 
     return (token_t){
-        .type = TOKEN_RATIONAL,
-        .data = data,
-        .line = line,
+            .type = TOKEN_RATIONAL,
+            .data = data,
+            .line = line,
     };
 }
 
@@ -83,15 +84,27 @@ token_t token_symbol(const char *name, unsigned int line) {
     };
 }
 
-token_t token_error(const char *value, unsigned int line) {
-    size_t size = strlen(value) + 1;
+token_t token_keyword(const char *name, unsigned int line) {
+    size_t size = strlen(name) + 1;
     void *data = malloc(size);
-    memcpy(data, value, size);
+    memcpy(data, name, size);
 
     return (token_t){
-        .type = TOKEN_ERROR,
-        .data = data,
-        .line = line,
+            .type = TOKEN_KEYWORD,
+            .data = data,
+            .line = line,
+    };
+}
+
+token_t token_error(const char *message, unsigned int line) {
+    size_t size = strlen(message) + 1;
+    void *data = malloc(size);
+    memcpy(data, message, size);
+
+    return (token_t){
+            .type = TOKEN_ERROR,
+            .data = data,
+            .line = line,
     };
 }
 
@@ -100,10 +113,10 @@ void token_print(const token_t *t) {
 
     switch (t->type) {
         case TOKEN_STRING:
-            printf("[%s -\"%s\" - Line %d ]\n", token_type, (const char *)t->data, t->line);
+            printf("[%s -\"%s\" - Line %d ]\n", token_type, (const char *) t->data, t->line);
             break;
         case TOKEN_RATIONAL: {
-            rational_number_t  *num = (rational_number_t *)t->data;
+            rational_number_t *num = (rational_number_t *) t->data;
             if (num->denominator == 1) {
                 printf("[%s - %d - Line %d]\n", token_type, num->numerator, t->line);
             } else {
@@ -112,21 +125,22 @@ void token_print(const token_t *t) {
             break;
         }
         case TOKEN_REAL: {
-            real_number_t *num = (real_number_t *)t->data;
+            real_number_t *num = (real_number_t *) t->data;
 
             printf("[%s - %f - Line %d]", token_type, num->value, t->line);
             break;
         }
         case TOKEN_BOOLEAN: {
-            const char *value = *(bool *)t->data ? "#true" : "#false";
+            const char *value = *(bool *) t->data ? "#true" : "#false";
             printf("[%s - %s - Line %d]\n", token_type, value, t->line);
             break;
         }
         case TOKEN_SYMBOL:
-            printf("[%s - '%s - Line %d]\n", token_type, (const char *)t->data, t->line);
+        case TOKEN_KEYWORD:
+            printf("[%s - '%s - Line %d]\n", token_type, (const char *) t->data, t->line);
             break;
         case TOKEN_ERROR:
-            printf("[%s - '%s - Line %d]\n", token_type, (const char *)t->data, t->line);
+            printf("[%s - '%s - Line %d]\n", token_type, (const char *) t->data, t->line);
         default:
             printf("[%s - Line %d]\n", token_type, t->line);
             break;

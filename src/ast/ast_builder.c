@@ -50,6 +50,9 @@ ast_node_t *ast_builder_build_tree(ast_builder_t *b) {
                 return ast_node_new(TAG_BOOLEAN, curr.data, 0, NULL);
             case TOKEN_SYMBOL:
                 return ast_node_new(TAG_SYMBOL, curr.data, 0, NULL);
+            case TOKEN_KEYWORD:
+                return ast_node_new(TAG_KEYWORD, curr.data, 0, NULL);
+
             case TOKEN_EOF:
                 break;
             case TOKEN_ERROR:
@@ -62,7 +65,7 @@ ast_node_t *ast_builder_build_tree(ast_builder_t *b) {
 
 ast_node_t *ast_builder_next_expression(ast_builder_t *b, token_type_t end) {
     token_t expr_head;
-    if (ast_builder_advance(b, &expr_head) && expr_head.type == TOKEN_SYMBOL) {
+    if (ast_builder_advance(b, &expr_head) && (expr_head.type == TOKEN_SYMBOL || expr_head.type == TOKEN_KEYWORD)) {
 
         int capacity = 8;
         unsigned int num_children = 0;

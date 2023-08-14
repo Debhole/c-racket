@@ -12,7 +12,7 @@ add_library(c_racket_lib
         src/tokens/token.c
         src/tokens/token.h
         src/number.c
-        src/number.h src/ast/ast.c src/ast/ast.h src/ast/ast_builder.c src/ast/ast_builder.h)
+        src/number.h src/ast/ast.c src/ast/ast.h src/ast/ast_builder.c src/ast/ast_builder.h src/keyword.c src/keyword.h)
 target_include_directories(c_racket_lib PUBLIC src)
 
 add_executable(c_racket src/main.c)

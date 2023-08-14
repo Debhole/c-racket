@@ -30,11 +30,11 @@ bool scanner_try_next_string(scanner_t *s, token_t *t);
 
 bool scanner_try_next_hash_delimited(scanner_t *s, token_t *t);
 
-bool scanner_try_next_sym_num(scanner_t *s, token_t *t);
+bool scanner_try_next_symbol_or_name(scanner_t *s, token_t *t);
 
 bool scanner_try_next_number(scanner_t *s, token_t *t);
 
-bool scanner_try_next_symbol(scanner_t *s, token_t *t);
+bool scanner_try_next_name(scanner_t *s, token_t *t);
 
 bool scanner_try_next_datum(scanner_t *s, char * c, size_t size);
 

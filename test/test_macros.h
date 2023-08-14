@@ -18,7 +18,12 @@ typedef enum result_t {
     assert(tok.type == TOKEN_SYMBOL); \
     assert_streq((char *) tok.data, str)
 
-#define assert_rationaleq(rnum, num, den)                         \
+#define assert_kweq(tok, str)          \
+    assert(tok.type == TOKEN_KEYWORD); \
+    assert_streq((char *) tok.data, str)
+
+
+#define assert_rationaleq(rnum, num, den)                   \
     assert((*(rational_number_t *) rnum).numerator == num); \
     assert((*(rational_number_t *) rnum).denominator == den)
 
