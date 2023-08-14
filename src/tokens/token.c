@@ -71,21 +71,10 @@ token_t token_real(real_number_t num, unsigned int line) {
     };
 }
 
-token_t token_complex(complex_number_t num, unsigned int line) {
-    void *data = malloc(sizeof(complex_number_t));
-    memcpy(data, &num, sizeof(complex_number_t));
-
-    return (token_t){
-            .type = TOKEN_COMPLEX,
-            .data = data,
-            .line = line,
-    };
-}
-
-token_t token_symbol(const char *value, unsigned int line) {
-    size_t size = strlen(value) + 1;
+token_t token_symbol(const char *name, unsigned int line) {
+    size_t size = strlen(name) + 1;
     void *data = malloc(size);
-    memcpy(data, value, size);
+    memcpy(data, name, size);
 
     return (token_t){
             .type = TOKEN_SYMBOL,
@@ -126,16 +115,6 @@ void token_print(const token_t *t) {
             real_number_t *num = (real_number_t *)t->data;
 
             printf("[%s - %f - Line %d]", token_type, num->value, t->line);
-            break;
-        }
-        case TOKEN_COMPLEX: {
-            complex_number_t *num = (complex_number_t *)t->data;
-
-            if (num->complex < 0) {
-                printf("[%s - %f-%fi - Line %d]", token_type, num->real, num->complex, t->line);
-            } else {
-                printf("[%s - %f+%fi - Line %d]", token_type, num->real, num->complex, t->line);
-            }
             break;
         }
         case TOKEN_BOOLEAN: {

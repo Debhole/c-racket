@@ -16,6 +16,9 @@ int main() {
     record_test(test_scanner_strings);
     record_test(test_scanner_bools);
     record_test(test_scanner_datum);
+    record_test(test_scanner_numbers);
+    record_test(test_scanner_symbols);
+    record_test(test_scanner_all);
 
     record_test(test_token);
 

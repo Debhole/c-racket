@@ -17,7 +17,6 @@ typedef enum token_type_t {
     TOKEN_STRING,
     TOKEN_RATIONAL,
     TOKEN_REAL,
-    TOKEN_COMPLEX,
     TOKEN_BOOLEAN,
     TOKEN_SYMBOL,
 
@@ -50,8 +49,6 @@ inline const char *token_type_to_string(token_type_t type) {
             return "Rational";
         case TOKEN_REAL:
             return "Real";
-        case TOKEN_COMPLEX:
-            return "Complex";
         case TOKEN_BOOLEAN:
             return "Boolean";
         case TOKEN_SYMBOL:

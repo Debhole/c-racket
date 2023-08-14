@@ -6,7 +6,6 @@
 typedef enum number_type_t {
     NUMBER_RATIONAL,
     NUMBER_REAL,
-    NUMBER_COMPLEX,
 } number_type_t;
 
 typedef struct rational_number_t {
@@ -22,15 +21,6 @@ typedef struct real_number_t {
 
 real_number_t real_number_new(double value);
 
-typedef struct complex_number_t {
-    double real;
-    double complex;
-} complex_number_t;
+bool try_to_rational_number(char *c, size_t size, int base, rational_number_t *num);
 
-complex_number_t complex_number_new(double real, double complex);
-
-bool try_to_rational_number(char *c, size_t size, rational_number_t *num);
-
-bool try_to_real_number(char *c, size_t size, real_number_t *num);
-
-bool try_to_complex_number(char *c, size_t size, complex_number_t *num);
+bool try_to_real_number(char *c, size_t size, int base, real_number_t *num);

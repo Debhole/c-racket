@@ -14,6 +14,10 @@ typedef enum result_t {
 
 #define assert_streq(x, y) assert(strcmp(x, y) == 0)
 
+#define assert_symeq(x, y)          \
+    assert(x.type == TOKEN_SYMBOL); \
+    assert_streq((char *) x.data, y)
+
 #define init_tests() int num_fails = 0
 
 #define report_tests() return num_fails
