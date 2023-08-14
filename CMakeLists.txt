@@ -5,10 +5,14 @@ set(CMAKE_C_STANDARD 11)
 
 add_library(c_racket_lib
         src/tokens/token_type.h
-        src/scanner.c
-        src/scanner.h
+        src/scanner/scanner.c
+        src/scanner/scanner.h
         src/tokens/token_list.c
-        src/tokens/token_list.h src/tokens/token.c src/tokens/token.h)
+        src/tokens/token_list.h
+        src/tokens/token.c
+        src/tokens/token.h
+        src/number.c
+        src/number.h)
 target_include_directories(c_racket_lib PUBLIC src)
 
 add_executable(c_racket src/main.c)

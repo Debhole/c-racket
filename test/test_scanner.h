@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scanner.h"
+#include "scanner/scanner.h"
 #include "tokens/token.h"
 #include "tokens/token_list.h"
 
@@ -47,7 +47,7 @@ inline result_t test_scanner_strings() {
     assert(tokens.len == 2);
 
     assert(tokens.tokens[0].type == TOKEN_STRING);
-    assert(strcmp(tokens.tokens[0].data, "Hello Newline!") == 0);
+    assert_streq(tokens.tokens[0].data, "Hello Newline!");
 
     scanner_free(&s);
     token_list_free(&tokens);
@@ -62,9 +62,9 @@ inline result_t test_scanner_strings() {
     assert(tokens.len == 4);
 
     assert(tokens.tokens[0].type == TOKEN_STRING);
-    assert(strcmp(tokens.tokens[0].data, "Hi There!") == 0);
-    assert(strcmp(tokens.tokens[1].data, "Does \"this\" show up \\correctly\\?") == 0);
-    assert(strcmp(tokens.tokens[2].data, "How about these? \'\a\b\t\n\v\f\r\'") == 0);
+    assert_streq(tokens.tokens[0].data, "Hi There!");
+    assert_streq(tokens.tokens[1].data, "Does \"this\" show up \\correctly\\?");
+    assert_streq(tokens.tokens[2].data, "How about these? \'\a\b\t\n\v\f\r\'");
 
     scanner_free(&s);
     token_list_free(&tokens);
@@ -95,6 +95,16 @@ inline result_t test_scanner_bools() {
 
     scanner_free(&s);
     token_list_free(&tokens);
+
+    return SUCCESS;
+}
+
+inline result_t test_scanner_datum() {
+    scanner_t s = scanner_new("this_is_a_datum#12345 (other junk...)");
+    char buf[2048];
+
+    assert(scanner_try_next_datum(&s, buf, sizeof buf));
+    assert_streq(buf, "this_is_a_datum#12345");
 
     return SUCCESS;
 }

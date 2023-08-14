@@ -1,4 +1,4 @@
-#include "scanner.h"
+#include "scanner/scanner.h"
 #include "tokens/token.h"
 #include "tokens/token_list.h"
 

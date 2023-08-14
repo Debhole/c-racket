@@ -12,6 +12,8 @@ typedef enum result_t {
         if (!(x)) return FAILURE; \
     } while (0)
 
+#define assert_streq(x, y) assert(strcmp(x, y) == 0)
+
 #define init_tests() int num_fails = 0
 
 #define report_tests() return num_fails

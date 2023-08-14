@@ -1,4 +1,5 @@
 #include "scanner.h"
+#include "number.h"
 #include "tokens/token_list.h"
 
 #include <ctype.h>
@@ -98,8 +99,15 @@ bool scanner_try_next_token(scanner_t *s, token_t *t) {
         case '#':
             return scanner_try_next_hash_delimited(s, t);
 
-        default:
-            return false;
+        // The sequence does not start with a delimiter or a '#', so it is either
+        // a symbol or a number (or a '.')
+        default: {
+            // Unconsume the previous character since it contains relevant data (unlike
+            // delimiters, string literals, and hash-delimited tokens)
+            s->loc -= 1;
+
+            return scanner_try_next_sym_num(s, t);
+        }
     }
 }
 
@@ -167,13 +175,44 @@ bool scanner_try_next_hash_delimited(scanner_t *s, token_t *t) {
     }
 }
 
+bool scanner_try_next_sym_num(scanner_t *s, token_t *t) {
+    char buf[2048];
+
+    unsigned int line = s->line;
+
+    if (scanner_try_next_datum(s, buf, sizeof buf)) {
+        size_t size = strlen(buf) + 1;
+
+        rational_number_t rational;
+        real_number_t real;
+        complex_number_t complex;
+        if (try_to_rational_number(buf, size, &rational)) {
+            *t = token_rational(rational, line);
+            return true;
+        } else if(try_to_real_number(buf, size, &real)) {
+            *t = token_real(real, line);
+            return true;
+        } else if (try_to_complex_number(buf, size, &complex)) {
+            *t = token_complex(complex, line);
+            return true;
+        }
+    }
+
+    if (scanner_try_next_datum_fuzzy(s, buf, sizeof buf)) {
+        *t = token_symbol(buf, line);
+        return true;
+    }
+
+    return false;
+}
+
 bool scanner_try_next_datum(scanner_t *s, char *c, size_t size) {
-    char curr, next;
+    char curr;
 
     unsigned int loc = 0;
 
     // Read until next delimiter
-    while (!is_delimiter(next = scanner_peek(s))) {
+    while (!is_delimiter(scanner_peek(s))) {
         curr = scanner_advance(s);
 
         if (curr == '\0') {
@@ -182,6 +221,40 @@ bool scanner_try_next_datum(scanner_t *s, char *c, size_t size) {
             c[size - 1] = '\0';
             return false;
         } else {
+            c[loc] = curr;
+            loc += 1;
+        }
+    }
+
+    c[loc] = '\0';
+    return true;
+}
+
+bool scanner_try_next_datum_fuzzy(scanner_t *s, char *c, size_t size) {
+    char curr;
+
+    unsigned int loc = 0;
+
+    // Read until next delimiter
+    while (!is_delimiter(scanner_peek(s))) {
+        curr = scanner_advance(s);
+
+        if (curr == '\0') {
+            break;
+        } else if (loc >= size - 1) {
+            c[size - 1] = '\0';
+            return false;
+        } else if(curr == '\\') {
+            curr = scanner_advance(s);
+            c[loc] = curr;
+            loc += 1;
+        } else if (curr == '|') {
+            while ((curr = scanner_advance(s)) != '|' && curr !='\0') {
+                c[loc] = curr;
+                loc += 1;
+            }
+        }
+        else {
             c[loc] = curr;
             loc += 1;
         }

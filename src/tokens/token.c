@@ -1,6 +1,7 @@
 #include "token.h"
 
 #include "token_type.h"
+#include "number.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,16 +38,6 @@ token_t token_string(const char *value, unsigned int line) {
     };
 }
 
-token_t token_number(double value, unsigned int line) {
-    void *data = malloc(sizeof(double));
-    memcpy(data, &value, sizeof(double));
-
-    return (token_t){
-        .type = TOKEN_NUMBER,
-        .data = data,
-        .line = line,
-    };
-}
 token_t token_boolean(bool value, unsigned int line) {
     void *data = malloc(sizeof(bool));
     memcpy(data, &value, sizeof(bool));
@@ -55,6 +46,39 @@ token_t token_boolean(bool value, unsigned int line) {
         .type = TOKEN_BOOLEAN,
         .data = data,
         .line = line,
+    };
+}
+
+token_t token_rational(rational_number_t num, unsigned int line) {
+    void *data = malloc(sizeof(rational_number_t));
+    memcpy(data, &num, sizeof(rational_number_t));
+
+    return (token_t){
+        .type = TOKEN_RATIONAL,
+        .data = data,
+        .line = line,
+    };
+}
+
+token_t token_real(real_number_t num, unsigned int line) {
+    void *data = malloc(sizeof(real_number_t));
+    memcpy(data, &num, sizeof(real_number_t));
+
+    return (token_t){
+            .type = TOKEN_REAL,
+            .data = data,
+            .line = line,
+    };
+}
+
+token_t token_complex(complex_number_t num, unsigned int line) {
+    void *data = malloc(sizeof(complex_number_t));
+    memcpy(data, &num, sizeof(complex_number_t));
+
+    return (token_t){
+            .type = TOKEN_COMPLEX,
+            .data = data,
+            .line = line,
     };
 }
 
@@ -89,9 +113,31 @@ void token_print(const token_t *t) {
         case TOKEN_STRING:
             printf("[%s -\"%s\" - Line %d ]\n", token_type, (const char *)t->data, t->line);
             break;
-        case TOKEN_NUMBER:
-            printf("[%s - %f - Line %d]\n", token_type, *(double *)t->data, t->line);
+        case TOKEN_RATIONAL: {
+            rational_number_t  *num = (rational_number_t *)t->data;
+            if (num->denominator == 1) {
+                printf("[%s - %d - Line %d]\n", token_type, num->numerator, t->line);
+            } else {
+                printf("[%s - %d/%d - Line %d]\n", token_type, num->numerator, num->denominator, t->line);
+            }
             break;
+        }
+        case TOKEN_REAL: {
+            real_number_t *num = (real_number_t *)t->data;
+
+            printf("[%s - %f - Line %d]", token_type, num->value, t->line);
+            break;
+        }
+        case TOKEN_COMPLEX: {
+            complex_number_t *num = (complex_number_t *)t->data;
+
+            if (num->complex < 0) {
+                printf("[%s - %f-%fi - Line %d]", token_type, num->real, num->complex, t->line);
+            } else {
+                printf("[%s - %f+%fi - Line %d]", token_type, num->real, num->complex, t->line);
+            }
+            break;
+        }
         case TOKEN_BOOLEAN: {
             const char *value = *(bool *)t->data ? "#true" : "#false";
             printf("[%s - %s - Line %d]\n", token_type, value, t->line);
