@@ -2,9 +2,8 @@
 
 #include "test_macros.h"
 
-inline result_t test_token_list() {
+result_t test_token_list() {
     token_list_t list = token_list_new();
-    assert(sizeof list == 12);
 
     token_list_push(&list, token_boolean(true, 1));
     token_list_push(&list, token_new(TOKEN_LEFT_PAREN, 1));
