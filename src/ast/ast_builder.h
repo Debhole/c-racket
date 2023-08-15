@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ast.h"
+#include "ast_list.h"
 #include "tokens/token_list.h"
 
 typedef struct ast_builder_t {
@@ -11,7 +12,9 @@ typedef struct ast_builder_t {
 ast_builder_t ast_builder_new(token_list_t *tokens);
 void ast_builder_free(ast_builder_t *b);
 
-ast_node_t *ast_builder_build_tree(ast_builder_t *b);
+ast_list_t ast_builder_get_trees(ast_builder_t *b);
+
+ast_node_t *ast_builder_next_tree(ast_builder_t *b);
 
 ast_node_t *ast_builder_next_expression(ast_builder_t *b, token_type_t end);
 

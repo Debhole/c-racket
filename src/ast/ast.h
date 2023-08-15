@@ -17,9 +17,9 @@ typedef enum tag_t {
 typedef struct ast_node_t {
     tag_t tag;
     void *data;
-    unsigned int num_children;
     struct ast_node_t **children;
+    unsigned int num_children;
 } ast_node_t;
 
 ast_node_t *ast_node_new(tag_t tag, void *data, unsigned int num_children, ast_node_t **children);
-void ast_node_free_all(ast_node_t *node);
+void ast_node_free(ast_node_t *node);

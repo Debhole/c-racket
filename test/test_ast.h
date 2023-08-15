@@ -1,9 +1,10 @@
 #pragma once
 
+#include "test_macros.h"
+
 #include "ast/ast.h"
 #include "ast/ast_builder.h"
 #include "scanner/scanner.h"
-#include "test_macros.h"
 #include "tokens/token_list.h"
 
 result_t test_ast_leaves() {
@@ -13,13 +14,13 @@ result_t test_ast_leaves() {
     token_list_push(&tokens, token_new(TOKEN_EOF, 1));
 
     ast_builder_t b = ast_builder_new(&tokens);
-    ast_node_t *tree = ast_builder_build_tree(&b);
+    ast_node_t *tree = ast_builder_next_tree(&b);
 
     assert(tree->num_children == 0);
     assert(*(bool *)tree->data == true);
     assert(tree->tag == TAG_BOOLEAN);
 
-    ast_node_free_all(tree);
+    ast_node_free(tree);
     ast_builder_free(&b);
 
     // (+ 4 3)
@@ -31,7 +32,7 @@ result_t test_ast_leaves() {
     token_list_push(&tokens, token_new(TOKEN_RIGHT_PAREN, 1));
 
     b = ast_builder_new(&tokens);
-    tree = ast_builder_build_tree(&b);
+    tree = ast_builder_next_tree(&b);
 
     assert(tree->tag == TAG_EXPRESSION);
     assert_streq("+", (char *)tree->data);
@@ -47,6 +48,9 @@ result_t test_ast_leaves() {
     assert_rationaleq(right->data, 3, 1);
     assert(right->num_children == 0);
 
+    ast_node_free(tree);
+    ast_builder_free(&b);
+
     return SUCCESS;
 }
 
@@ -55,7 +59,7 @@ result_t test_ast_nested() {
     token_list_t tokens = scanner_get_tokens(&s);
     ast_builder_t b = ast_builder_new(&tokens);
 
-    ast_node_t *tree = ast_builder_build_tree(&b);
+    ast_node_t *tree = ast_builder_next_tree(&b);
 
     assert(tree->tag == TAG_EXPRESSION);
     assert(tree->num_children == 3);
@@ -90,6 +94,9 @@ result_t test_ast_nested() {
     assert(nested_right->tag == TAG_RATIONAL);
     assert(nested_right->num_children == 0);
     assert_rationaleq(nested_right->data, 1, 1);
+
+    ast_node_free(tree);
+    ast_builder_free(&b);
 
     return SUCCESS;
 }

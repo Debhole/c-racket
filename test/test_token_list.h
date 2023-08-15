@@ -1,6 +1,6 @@
-#include "tokens/token_list.h"
-
 #include "test_macros.h"
+
+#include "tokens/token_list.h"
 
 result_t test_token_list() {
     token_list_t list = token_list_new();

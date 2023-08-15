@@ -1,10 +1,10 @@
 #pragma once
 
+#include "test_macros.h"
+
 #include "scanner/scanner.h"
 #include "tokens/token.h"
 #include "tokens/token_list.h"
-
-#include "test_macros.h"
 
 #include <string.h>
 

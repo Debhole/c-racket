@@ -1,5 +1,7 @@
-#include "test_ast.h"
 #include "test_macros.h"
+
+#include "test_ast.h"
+#include "test_ast_list.h"
 #include "test_scanner.h"
 #include "test_token.h"
 #include "test_token_list.h"
@@ -25,6 +27,8 @@ int main() {
 
     record_test(test_ast_leaves);
     record_test(test_ast_nested);
+
+    record_test(test_ast_list);
 
     report_tests();
 }

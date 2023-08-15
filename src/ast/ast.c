@@ -12,9 +12,9 @@ ast_node_t *ast_node_new(tag_t tag, void *data, unsigned int num_children, ast_n
     return node;
 }
 
-void ast_node_free_all(ast_node_t *node) {
+void ast_node_free(ast_node_t *node) {
     for (int i = 0; i < node->num_children; i += 1) {
-        ast_node_free_all(node->children[i]);
+        ast_node_free(node->children[i]);
     }
 
     free(node);

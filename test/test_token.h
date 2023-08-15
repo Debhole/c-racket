@@ -1,8 +1,8 @@
 #pragma once
 
-#include "tokens/token.h"
-
 #include "test_macros.h"
+
+#include "tokens/token.h"
 
 #include <stdbool.h>
 #include <string.h>
