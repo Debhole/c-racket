@@ -8,7 +8,7 @@
 
 #include <string.h>
 
-result_t test_scanner() {
+result_t test_scanner(void) {
     scanner_t s = scanner_new(
             ";Does this read basic delimiters correctly?\n"
             "([{}]) '`, ;Ignore the rest ()[\\a\n"
@@ -38,7 +38,7 @@ result_t test_scanner() {
     return SUCCESS;
 }
 
-result_t test_scanner_strings() {
+result_t test_scanner_strings(void) {
     scanner_t s = scanner_new(
             "\"Hello \\\n"
             "Newline!\"");
@@ -71,7 +71,7 @@ result_t test_scanner_strings() {
     return SUCCESS;
 }
 
-result_t test_scanner_bools() {
+result_t test_scanner_bools(void) {
     scanner_t s = scanner_new("#true(#t)#T #f'#false`#F");
     token_list_t tokens = scanner_get_tokens(&s);
 
@@ -98,7 +98,7 @@ result_t test_scanner_bools() {
     return SUCCESS;
 }
 
-result_t test_scanner_datum() {
+result_t test_scanner_datum(void) {
     scanner_t s = scanner_new("this_is_a_datum#12345 other junk...)");
     char buf[2048];
 
@@ -114,7 +114,7 @@ result_t test_scanner_datum() {
     return SUCCESS;
 }
 
-result_t test_scanner_numbers() {
+result_t test_scanner_numbers(void) {
     scanner_t s = scanner_new("1/2 123456789 0.5 129/132");
     token_list_t tokens = scanner_get_tokens(&s);
 
@@ -145,7 +145,7 @@ result_t test_scanner_numbers() {
     return SUCCESS;
 }
 
-result_t test_scanner_symbols() {
+result_t test_scanner_symbols(void) {
     scanner_t s = scanner_new(
             "10/ abcd 50\\6 88\\ a\n"
             "|(multi \nline \nsymbol! \n100)|");
@@ -170,7 +170,7 @@ result_t test_scanner_symbols() {
     return SUCCESS;
 }
 
-result_t test_scanner_all() {
+result_t test_scanner_all(void) {
     scanner_t s = scanner_new(
             "(define (str\\ mul str int)\n"
             "  (cond\n"

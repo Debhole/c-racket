@@ -148,9 +148,6 @@ bool scanner_try_next_hash_delimited(scanner_t *s, token_t *t) {
     unsigned int start_line = s->line;
     char next = scanner_peek(s);
 
-    char buf[2048];
-    unsigned int loc = 0;
-
     switch (next) {
         case '\\':
             return false;
@@ -205,7 +202,7 @@ bool scanner_try_next_number(scanner_t *s, token_t *t) {
         if (try_to_rational_number(buf, size, 10, &rational)) {
             *t = token_rational(rational, line);
             return true;
-        } else if (try_to_real_number(buf, size, 10, &real)) {
+        } else if (try_to_real_number(buf, size, &real)) {
             *t = token_real(real, line);
             return true;
         }

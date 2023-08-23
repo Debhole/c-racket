@@ -20,17 +20,20 @@ bool try_to_rational_number(char *c, size_t size, int base, rational_number_t *n
     char *end;
     int numerator = strtol(c, &end, base);
 
-    if ((end - c < size - 1) && end[0] == '/') {
+    size_t loc = (size_t) (end - c);
+
+    if ((loc < size - 1) && end[0] == '/') {
         char *start = end + 1;
         int denominator = strtol(start, &end, base);
 
-        if (end - c == size) {
+        loc = (size_t) (end - c);
+        if (loc == size) {
             *num = rational_number_new(numerator, denominator);
             return true;
         } else {
             return false;
         }
-    } else if (end - c == size) {
+    } else if (loc == size) {
         *num = rational_number_new(numerator, 1);
         return true;
     } else {
@@ -38,11 +41,13 @@ bool try_to_rational_number(char *c, size_t size, int base, rational_number_t *n
     }
 }
 
-bool try_to_real_number(char *c, size_t size, int base, real_number_t *num) {
+bool try_to_real_number(char *c, size_t size, real_number_t *num) {
     char *end;
     double value = strtod(c, &end);
 
-    if (end - c == size) {
+    size_t loc = (size_t) (end - c);
+
+    if (loc == size) {
         *num = real_number_new(value);
         return true;
     } else {

@@ -15,7 +15,7 @@ token_list_t token_list_new() {
 }
 
 void token_list_free(token_list_t *list) {
-    for (int i = 0; i < list->len; i += 1) {
+    for (unsigned int i = 0; i < list->len; i += 1) {
         token_free(&list->tokens[i]);
     }
 

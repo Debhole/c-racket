@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-int main() {
+int main(void) {
     setvbuf(stdout, NULL, _IONBF, 0);
     printf("C-Racket BSL Version 0.1\n");
     printf("Press Ctrl+C to quit\n");
@@ -23,7 +23,7 @@ int main() {
         token_list_t list = scanner_get_tokens(&s);
 
         token_t tmp;
-        for (int i = 0; i < list.len; i++) {
+        for (unsigned int i = 0; i < list.len; i++) {
             token_list_get(&list, i, &tmp);
             token_print(&tmp);
         }

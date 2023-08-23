@@ -2,7 +2,8 @@
 
 const char *token_type_to_string(token_type_t type) {
     switch (type) {
-        case TOKEN_LEFT_PAREN: return "Left Parenthesis";
+        case TOKEN_LEFT_PAREN:
+            return "Left Parenthesis";
         case TOKEN_RIGHT_PAREN:
             return "Right Parenthesis";
         case TOKEN_LEFT_BRACE:
@@ -35,5 +36,7 @@ const char *token_type_to_string(token_type_t type) {
             return "End of File";
         case TOKEN_ERROR:
             return "Error";
+        default:
+            return "Unknown";
     }
 }

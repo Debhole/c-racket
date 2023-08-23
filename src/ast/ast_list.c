@@ -20,7 +20,7 @@ ast_list_t ast_list_empty() {
 }
 
 void ast_list_free(ast_list_t *list) {
-    for (int i = 0; i < list->len; i += 1) {
+    for (unsigned int i = 0; i < list->len; i += 1) {
         ast_node_free(list->trees[i]);
     }
 

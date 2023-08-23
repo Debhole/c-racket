@@ -23,4 +23,4 @@ real_number_t real_number_new(double value);
 
 bool try_to_rational_number(char *c, size_t size, int base, rational_number_t *num);
 
-bool try_to_real_number(char *c, size_t size, int base, real_number_t *num);
+bool try_to_real_number(char *c, size_t size, real_number_t *num);
