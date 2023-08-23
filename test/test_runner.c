@@ -5,6 +5,7 @@
 #include "test_scanner.h"
 #include "test_token.h"
 #include "test_token_list.h"
+#include "test_interpreter.h"
 
 #include <stdio.h>
 
@@ -31,6 +32,8 @@ int main(void) {
     record_test(test_ast_list);
 
     record_test(test_ast_mem);
+
+    record_test(test_basic_functions);
 
     report_tests();
 }

@@ -13,3 +13,5 @@ typedef struct ast_node_t {
 
 ast_node_t *ast_node_new(ast_tag_t tag, void *data, size_t data_size, unsigned int num_children, ast_node_t **children);
 void ast_node_free(ast_node_t *node);
+
+ast_node_t *ast_node_clone(ast_node_t *node);
