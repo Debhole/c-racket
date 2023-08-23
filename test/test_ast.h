@@ -102,3 +102,16 @@ result_t test_ast_nested(void) {
 
     return SUCCESS;
 }
+
+result_t test_ast_mem(void) {
+    scanner_t s = scanner_new("(+ 1 1)");
+    token_list_t tokens = scanner_get_tokens(&s);
+    ast_builder_t b = ast_builder_new(&tokens);
+    ast_list_t nodes = ast_builder_get_trees(&b);
+
+    ast_builder_free(&b);
+    ast_list_free(&nodes);
+    scanner_free(&s);
+
+    return SUCCESS;
+}

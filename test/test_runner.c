@@ -30,5 +30,7 @@ int main(void) {
 
     record_test(test_ast_list);
 
+    record_test(test_ast_mem);
+
     report_tests();
 }

@@ -21,5 +21,6 @@ void ast_node_free(ast_node_t *node) {
     }
 
     free(node->data);
+    free(node->children);
     free(node);
 }
