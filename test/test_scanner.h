@@ -111,6 +111,8 @@ result_t test_scanner_datum(void) {
     assert(scanner_try_next_datum_fuzzy(&s, buf, sizeof buf));
     assert_streq(buf, "this is a fuzzy datum");
 
+    scanner_free(&s);
+
     return SUCCESS;
 }
 
@@ -249,6 +251,9 @@ result_t test_scanner_all(void) {
 
     assert(tokens.tokens[38].type == TOKEN_RIGHT_PAREN);
     assert(tokens.tokens[39].type == TOKEN_EOF);
+
+    token_list_free(&tokens);
+    scanner_free(&s);
 
     return SUCCESS;
 }

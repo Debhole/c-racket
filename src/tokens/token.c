@@ -12,6 +12,7 @@ token_t token_new(token_type_t type, unsigned int line) {
     return (token_t){
             .type = type,
             .data = NULL,
+            .data_size = 0,
             .line = line};
 }
 
@@ -24,6 +25,7 @@ void token_free(token_t *token) {
         free(token->data);
     }
     token->data = NULL;
+    token->data_size = 0;
     token->line = 0;
 }
 
@@ -35,39 +37,48 @@ token_t token_string(const char *value, unsigned int line) {
     return (token_t){
             .type = TOKEN_STRING,
             .data = data,
+            .data_size = size,
             .line = line,
     };
 }
 
 token_t token_boolean(bool value, unsigned int line) {
-    void *data = malloc(sizeof(bool));
-    memcpy(data, &value, sizeof(bool));
+    size_t size = sizeof(bool);
+
+    void *data = malloc(size);
+    memcpy(data, &value, size);
 
     return (token_t){
             .type = TOKEN_BOOLEAN,
             .data = data,
+            .data_size = size,
             .line = line,
     };
 }
 
 token_t token_rational(rational_number_t num, unsigned int line) {
-    void *data = malloc(sizeof(rational_number_t));
-    memcpy(data, &num, sizeof(rational_number_t));
+    size_t size = sizeof(rational_number_t);
+
+    void *data = malloc(size);
+    memcpy(data, &num, size);
 
     return (token_t){
             .type = TOKEN_RATIONAL,
             .data = data,
+            .data_size = size,
             .line = line,
     };
 }
 
 token_t token_real(real_number_t num, unsigned int line) {
-    void *data = malloc(sizeof(real_number_t));
-    memcpy(data, &num, sizeof(real_number_t));
+    size_t size = sizeof(real_number_t);
+    void *data = malloc(size);
+    memcpy(data, &num, size);
 
     return (token_t){
             .type = TOKEN_REAL,
             .data = data,
+            .data_size = size,
             .line = line,
     };
 }
@@ -80,6 +91,7 @@ token_t token_symbol(const char *name, unsigned int line) {
     return (token_t){
             .type = TOKEN_SYMBOL,
             .data = data,
+            .data_size = size,
             .line = line,
     };
 }
@@ -92,6 +104,7 @@ token_t token_keyword(const char *name, unsigned int line) {
     return (token_t){
             .type = TOKEN_KEYWORD,
             .data = data,
+            .data_size = size,
             .line = line,
     };
 }
@@ -104,6 +117,7 @@ token_t token_error(const char *message, unsigned int line) {
     return (token_t){
             .type = TOKEN_ERROR,
             .data = data,
+            .data_size = size,
             .line = line,
     };
 }

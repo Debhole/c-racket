@@ -51,17 +51,17 @@ ast_node_t *ast_builder_next_tree(ast_builder_t *b) {
                 return NULL;
 
             case TOKEN_STRING:
-                return ast_node_new(TAG_STRING, curr.data, 0, NULL);
+                return ast_node_new(TAG_STRING, curr.data, curr.data_size, 0, NULL);
             case TOKEN_RATIONAL:
-                return ast_node_new(TAG_RATIONAL, curr.data, 0, NULL);
+                return ast_node_new(TAG_RATIONAL, curr.data, curr.data_size, 0, NULL);
             case TOKEN_REAL:
-                return ast_node_new(TAG_REAL, curr.data, 0, NULL);
+                return ast_node_new(TAG_REAL, curr.data, curr.data_size, 0, NULL);
             case TOKEN_BOOLEAN:
-                return ast_node_new(TAG_BOOLEAN, curr.data, 0, NULL);
+                return ast_node_new(TAG_BOOLEAN, curr.data, curr.data_size, 0, NULL);
             case TOKEN_SYMBOL:
-                return ast_node_new(TAG_SYMBOL, curr.data, 0, NULL);
+                return ast_node_new(TAG_SYMBOL, curr.data, curr.data_size, 0, NULL);
             case TOKEN_KEYWORD:
-                return ast_node_new(TAG_KEYWORD, curr.data, 0, NULL);
+                return ast_node_new(TAG_KEYWORD, curr.data, curr.data_size, 0, NULL);
 
             case TOKEN_EOF:
             case TOKEN_ERROR:
@@ -100,7 +100,7 @@ ast_node_t *ast_builder_next_expression(ast_builder_t *b, token_type_t end) {
         unsigned int num_children;
         ast_list_deform(&children, &raw_children, &num_children);
 
-        return ast_node_new(TAG_EXPRESSION, expr_head.data, children.len, children.trees);
+        return ast_node_new(TAG_EXPRESSION, expr_head.data, expr_head.data_size, num_children, raw_children);
     } else {
         return NULL;
     }

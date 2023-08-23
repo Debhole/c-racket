@@ -2,7 +2,7 @@
 
 #include "tokens/token_list.h"
 
-result_t test_token_list() {
+result_t test_token_list(void) {
     token_list_t list = token_list_new();
 
     token_list_push(&list, token_boolean(true, 1));
@@ -11,7 +11,7 @@ result_t test_token_list() {
     assert(list.capacity == 8);
     assert(list.len == 3);
 
-    token_t token = token_string("Some String Literal", 1);
+    token_t token;
     assert(token_list_get(&list, 0, &token) && token.type == TOKEN_BOOLEAN && *(bool *) token.data == true);
     assert(token_list_get(&list, 1, &token) && token.type == TOKEN_LEFT_PAREN && token.data == NULL);
     assert(token_list_get(&list, 2, &token) && token.type == TOKEN_RIGHT_PAREN);

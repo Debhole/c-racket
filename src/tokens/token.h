@@ -8,6 +8,7 @@
 typedef struct token_t {
     token_type_t type;
     void *data;
+    size_t data_size;
     unsigned int line;
 } token_t;
 

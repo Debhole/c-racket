@@ -8,7 +8,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-result_t test_token() {
+result_t test_token(void) {
     token_t token = token_string("Some Data", 1);
     assert(token.type == TOKEN_STRING);
     assert(token.line == 1);

@@ -1,7 +1,9 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.22)
 project(c_racket C)
 
 set(CMAKE_C_STANDARD 11)
+
+add_compile_options(-g3 -O0)
 
 if (MSVC)
     # warning level 4 and all warnings as errors
@@ -27,7 +29,7 @@ add_library(c_racket_lib
         src/ast/ast_builder.h
         src/keyword.c
         src/keyword.h
-        src/tokens/token_type.c src/ast/ast_list.c src/ast/ast_list.h)
+        src/tokens/token_type.c src/ast/ast_list.c src/ast/ast_list.h src/ast/ast_tag.h)
 target_include_directories(c_racket_lib PUBLIC src)
 
 add_executable(c_racket src/main.c)

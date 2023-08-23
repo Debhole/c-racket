@@ -7,7 +7,7 @@
 #include "scanner/scanner.h"
 #include "tokens/token_list.h"
 
-result_t test_ast_leaves() {
+result_t test_ast_leaves(void) {
     // #true
     token_list_t tokens = token_list_new();
     token_list_push(&tokens, token_boolean(true, 1));
@@ -30,6 +30,7 @@ result_t test_ast_leaves() {
     token_list_push(&tokens, token_rational(rational_number_new(4, 1), 1));
     token_list_push(&tokens, token_rational(rational_number_new(3, 1), 1));
     token_list_push(&tokens, token_new(TOKEN_RIGHT_PAREN, 1));
+    token_list_push(&tokens, token_new(TOKEN_EOF, 1));
 
     b = ast_builder_new(&tokens);
     tree = ast_builder_next_tree(&b);
@@ -54,7 +55,7 @@ result_t test_ast_leaves() {
     return SUCCESS;
 }
 
-result_t test_ast_nested() {
+result_t test_ast_nested(void) {
     scanner_t s = scanner_new("(+ 3 4 (- 4 1))");
     token_list_t tokens = scanner_get_tokens(&s);
     ast_builder_t b = ast_builder_new(&tokens);
@@ -97,6 +98,7 @@ result_t test_ast_nested() {
 
     ast_node_free(tree);
     ast_builder_free(&b);
+    scanner_free(&s);
 
     return SUCCESS;
 }

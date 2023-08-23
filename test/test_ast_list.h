@@ -4,7 +4,7 @@
 
 #include "scanner/scanner.h"
 
-result_t test_ast_list() {
+result_t test_ast_list(void) {
     scanner_t s = scanner_new("(+ 4 5) 6 \"Hello, World!\" (define Hello \"World!\")");
     token_list_t tokens = scanner_get_tokens(&s);
     ast_builder_t b = ast_builder_new(&tokens);

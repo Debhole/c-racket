@@ -1,6 +1,6 @@
 #include "ast_list.h"
 
-ast_list_t ast_list_new() {
+ast_list_t ast_list_new(void) {
     int capacity = 8;
     ast_node_t **trees = malloc(sizeof(ast_node_t *) * capacity);
 
@@ -11,7 +11,7 @@ ast_list_t ast_list_new() {
     };
 }
 
-ast_list_t ast_list_empty() {
+ast_list_t ast_list_empty(void) {
     return (ast_list_t) {
         .len = 0,
         .capacity = 0,
@@ -31,14 +31,18 @@ void ast_list_free(ast_list_t *list) {
 }
 
 void ast_list_deform(ast_list_t *list, ast_node_t ***raw_trees, unsigned int *num_children) {
-    ast_node_t **new_list = realloc(list->trees, sizeof(ast_node_t *) * list->len);
+    ast_node_t **tmp_list = realloc(list->trees, sizeof(ast_node_t *) * list->len);
 
-    if (new_list) {
-        list->trees = new_list;
+    if (tmp_list) {
+        list->trees = tmp_list;
     }
 
     *raw_trees = list->trees;
     *num_children = list->len;
+
+    list->trees = NULL;
+    list->len = 0;
+    list->capacity = 0;
 }
 
 bool ast_list_push(ast_list_t *list, ast_node_t *tree) {

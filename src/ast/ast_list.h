@@ -8,8 +8,8 @@ typedef struct ast_list_t {
     ast_node_t **trees;
 } ast_list_t;
 
-ast_list_t ast_list_new();
-ast_list_t ast_list_empty();
+ast_list_t ast_list_new(void);
+ast_list_t ast_list_empty(void);
 void ast_list_free(ast_list_t *list);
 
 void ast_list_deform(ast_list_t *list, ast_node_t ***raw_trees, unsigned int *num_children);

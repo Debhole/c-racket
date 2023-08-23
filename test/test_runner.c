@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 
-int main() {
+int main(void) {
     printf("*****************\n* Running Tests *\n*****************\n");
 
     init_tests();

@@ -1,25 +1,15 @@
 #pragma once
 
+#include "ast_tag.h"
 #include "tokens/token_list.h"
 
-typedef enum tag_t {
-    TAG_EXPRESSION,
-    TAG_DEFINITION,
-    TAG_RATIONAL,
-    TAG_REAL,
-    TAG_STRING,
-    TAG_BOOLEAN,
-    TAG_KEYWORD,
-    TAG_SYMBOL,
-    TAG_COND_CLAUSE,
-} tag_t;
-
 typedef struct ast_node_t {
-    tag_t tag;
+    ast_tag_t tag;
     void *data;
+    size_t data_size;
     struct ast_node_t **children;
     unsigned int num_children;
 } ast_node_t;
 
-ast_node_t *ast_node_new(tag_t tag, void *data, unsigned int num_children, ast_node_t **children);
+ast_node_t *ast_node_new(ast_tag_t tag, void *data, size_t data_size, unsigned int num_children, ast_node_t **children);
 void ast_node_free(ast_node_t *node);
