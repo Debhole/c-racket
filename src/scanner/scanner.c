@@ -197,13 +197,13 @@ bool scanner_try_next_number(scanner_t *s, token_t *t) {
     if (scanner_try_next_datum(s, buf, sizeof buf)) {
         size_t size = strlen(buf);
 
-        rational_number_t rational;
-        real_number_t real;
-        if (try_to_rational_number(buf, size, 10, &rational)) {
-            *t = token_rational(rational, line);
+        int integer;
+        double dbl;
+        if (try_to_integer(buf, size, 10, &integer)) {
+            *t = token_integer(integer, line);
             return true;
-        } else if (try_to_real_number(buf, size, &real)) {
-            *t = token_real(real, line);
+        } else if (try_to_double(buf, size, &dbl)) {
+            *t = token_double(dbl, line);
             return true;
         }
     }

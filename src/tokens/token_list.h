@@ -10,7 +10,7 @@ typedef struct token_list_t {
     token_t *tokens;
 } token_list_t;
 
-token_list_t token_list_new();
+token_list_t token_list_new(void);
 void token_list_free(token_list_t *list);
 
 bool token_list_push(token_list_t *list, token_t token);

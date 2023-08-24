@@ -3,52 +3,28 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-rational_number_t rational_number_new(int numerator, int denominator) {
-    return (rational_number_t){
-            .numerator = numerator,
-            .denominator = denominator,
-    };
-}
-
-real_number_t real_number_new(double value) {
-    return (real_number_t){
-            .value = value,
-    };
-}
-
-bool try_to_rational_number(char *c, size_t size, int base, rational_number_t *num) {
+bool try_to_integer(char *c, size_t size, int base, int *num) {
     char *end;
-    int numerator = strtol(c, &end, base);
+    int value = strtol(c, &end, base);
 
     size_t loc = (size_t) (end - c);
 
-    if ((loc < size - 1) && end[0] == '/') {
-        char *start = end + 1;
-        int denominator = strtol(start, &end, base);
-
-        loc = (size_t) (end - c);
-        if (loc == size) {
-            *num = rational_number_new(numerator, denominator);
-            return true;
-        } else {
-            return false;
-        }
-    } else if (loc == size) {
-        *num = rational_number_new(numerator, 1);
+    if (loc == size) {
+        *num = value;
         return true;
     } else {
         return false;
     }
 }
 
-bool try_to_real_number(char *c, size_t size, real_number_t *num) {
+bool try_to_double(char *c, size_t size, double *num) {
     char *end;
     double value = strtod(c, &end);
 
     size_t loc = (size_t) (end - c);
 
     if (loc == size) {
-        *num = real_number_new(value);
+        *num = value;
         return true;
     } else {
         return false;

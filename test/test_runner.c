@@ -34,6 +34,7 @@ int main(void) {
     record_test(test_ast_mem);
 
     record_test(test_basic_functions);
+    record_test(test_complex_functions);
 
     report_tests();
 }

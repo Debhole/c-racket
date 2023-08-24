@@ -1,9 +1,10 @@
 #pragma once
 
 #include "ast/ast_list.h"
+#include "function_book.h"
 
 typedef struct interpreter_t {
-    int tmp;
+    function_book_t function_book;
 } interpreter_t;
 
 interpreter_t interpreter_new(void);

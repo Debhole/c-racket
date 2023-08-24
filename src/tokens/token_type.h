@@ -15,8 +15,8 @@ typedef enum token_type_t {
     TOKEN_UNQUOTE,
 
     TOKEN_STRING,
-    TOKEN_RATIONAL,
-    TOKEN_REAL,
+    TOKEN_INTEGER,
+    TOKEN_DOUBLE,
     TOKEN_BOOLEAN,
     TOKEN_SYMBOL,
     TOKEN_KEYWORD,

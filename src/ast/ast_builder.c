@@ -52,10 +52,10 @@ ast_node_t *ast_builder_next_tree(ast_builder_t *b) {
 
             case TOKEN_STRING:
                 return ast_node_new(TAG_STRING, curr.data, curr.data_size, 0, NULL);
-            case TOKEN_RATIONAL:
-                return ast_node_new(TAG_RATIONAL, curr.data, curr.data_size, 0, NULL);
-            case TOKEN_REAL:
-                return ast_node_new(TAG_REAL, curr.data, curr.data_size, 0, NULL);
+            case TOKEN_INTEGER:
+                return ast_node_new(TAG_INTEGER, curr.data, curr.data_size, 0, NULL);
+            case TOKEN_DOUBLE:
+                return ast_node_new(TAG_DOUBLE, curr.data, curr.data_size, 0, NULL);
             case TOKEN_BOOLEAN:
                 return ast_node_new(TAG_BOOLEAN, curr.data, curr.data_size, 0, NULL);
             case TOKEN_SYMBOL:

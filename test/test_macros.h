@@ -22,10 +22,10 @@ typedef enum result_t {
     assert(tok.type == TOKEN_KEYWORD); \
     assert_streq((char *) tok.data, str)
 
+#define assert_inteq(val, num) assert(*(int *)val == num)
 
-#define assert_rationaleq(rnum, num, den)                   \
-    assert((*(rational_number_t *) rnum).numerator == num); \
-    assert((*(rational_number_t *) rnum).denominator == den)
+#define assert_double_approxeq(val, num, epsilon) \
+    assert(((*(double *)val - num) < epsilon) && ((num - *(double *)val) < epsilon))
 
 #define init_tests() int num_fails = 0
 

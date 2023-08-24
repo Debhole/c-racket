@@ -21,16 +21,16 @@ result_t test_ast_list(void) {
     assert(tree->num_children == 2);
     assert_streq((char *)tree->data, "+");
 
-    assert(tree->children[0]->tag == TAG_RATIONAL);
-    assert_rationaleq(tree->children[0]->data, 4, 1);
-    assert(tree->children[1]->tag == TAG_RATIONAL);
-    assert_rationaleq(tree->children[1]->data, 5, 1);
+    assert(tree->children[0]->tag == TAG_INTEGER);
+    assert_inteq(tree->children[0]->data, 4);
+    assert(tree->children[1]->tag == TAG_INTEGER);
+    assert_inteq(tree->children[1]->data, 5);
 
     // 6
     assert(ast_list_get(&trees, 1, &tree));
-    assert(tree->tag == TAG_RATIONAL);
+    assert(tree->tag == TAG_INTEGER);
     assert(tree->num_children == 0);
-    assert_rationaleq(tree->data, 6, 1);
+    assert_inteq(tree->data, 6);
 
     // "Hello, World!"
     assert(ast_list_get(&trees, 2, &tree));

@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-token_list_t token_list_new() {
+token_list_t token_list_new(void) {
     int capacity = 8;
     token_t *tokens = malloc(sizeof(token_t) * capacity);
 

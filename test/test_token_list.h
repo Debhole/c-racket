@@ -24,7 +24,7 @@ result_t test_token_list(void) {
 
     list = token_list_new();
     for (int i = 0; i < 65; i += 1) {
-        token_list_push(&list, token_real(real_number_new(5.0), 1));
+        token_list_push(&list, token_double(5.0, 1));
     }
     assert(list.capacity == 128);
     assert(list.len == 65);

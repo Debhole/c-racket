@@ -71,3 +71,12 @@ bool ast_list_get(ast_list_t *list, unsigned int idx, ast_node_t **tree) {
         return true;
     }
 }
+
+bool ast_list_get_clone(ast_list_t *list, unsigned int idx, ast_node_t **tree) {
+    if (!ast_list_get(list, idx, tree)) {
+        return false;
+    } else {
+        (*tree) = ast_node_clone(*tree);
+        return true;
+    }
+}

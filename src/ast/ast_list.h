@@ -16,3 +16,4 @@ void ast_list_deform(ast_list_t *list, ast_node_t ***raw_trees, unsigned int *nu
 
 bool ast_list_push(ast_list_t *list, ast_node_t *tree);
 bool ast_list_get(ast_list_t *list, unsigned int idx, ast_node_t **tree);
+bool ast_list_get_clone(ast_list_t *list, unsigned int idx, ast_node_t **tree);

@@ -56,27 +56,27 @@ token_t token_boolean(bool value, unsigned int line) {
     };
 }
 
-token_t token_rational(rational_number_t num, unsigned int line) {
-    size_t size = sizeof(rational_number_t);
+token_t token_integer(int num, unsigned int line) {
+    size_t size = sizeof(int);
 
     void *data = malloc(size);
     memcpy(data, &num, size);
 
     return (token_t){
-            .type = TOKEN_RATIONAL,
+            .type = TOKEN_INTEGER,
             .data = data,
             .data_size = size,
             .line = line,
     };
 }
 
-token_t token_real(real_number_t num, unsigned int line) {
-    size_t size = sizeof(real_number_t);
+token_t token_double(double num, unsigned int line) {
+    size_t size = sizeof(double);
     void *data = malloc(size);
     memcpy(data, &num, size);
 
     return (token_t){
-            .type = TOKEN_REAL,
+            .type = TOKEN_DOUBLE,
             .data = data,
             .data_size = size,
             .line = line,
@@ -129,19 +129,12 @@ void token_print(const token_t *t) {
         case TOKEN_STRING:
             printf("[%s -\"%s\" - Line %d ]\n", token_type, (const char *) t->data, t->line);
             break;
-        case TOKEN_RATIONAL: {
-            rational_number_t *num = (rational_number_t *) t->data;
-            if (num->denominator == 1) {
-                printf("[%s - %d - Line %d]\n", token_type, num->numerator, t->line);
-            } else {
-                printf("[%s - %d/%d - Line %d]\n", token_type, num->numerator, num->denominator, t->line);
-            }
+        case TOKEN_INTEGER: {
+            printf("[%s - %d - Line %d]\n", token_type, *(int *)t->data, t->line);
             break;
         }
-        case TOKEN_REAL: {
-            real_number_t *num = (real_number_t *) t->data;
-
-            printf("[%s - %f - Line %d]", token_type, num->value, t->line);
+        case TOKEN_DOUBLE: {
+            printf("[%s - %f - Line %d]", token_type, *(double *)t->data, t->line);
             break;
         }
         case TOKEN_BOOLEAN: {

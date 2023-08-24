@@ -22,10 +22,10 @@ const char *token_type_to_string(token_type_t type) {
             return "Unquote";
         case TOKEN_STRING:
             return "String";
-        case TOKEN_RATIONAL:
-            return "Rational";
-        case TOKEN_REAL:
-            return "Real";
+        case TOKEN_INTEGER:
+            return "Integer";
+        case TOKEN_DOUBLE:
+            return "Double";
         case TOKEN_BOOLEAN:
             return "Boolean";
         case TOKEN_SYMBOL:

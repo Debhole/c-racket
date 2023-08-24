@@ -27,8 +27,8 @@ result_t test_ast_leaves(void) {
     tokens = token_list_new();
     token_list_push(&tokens, token_new(TOKEN_LEFT_PAREN, 1));
     token_list_push(&tokens, token_symbol("+", 1));
-    token_list_push(&tokens, token_rational(rational_number_new(4, 1), 1));
-    token_list_push(&tokens, token_rational(rational_number_new(3, 1), 1));
+    token_list_push(&tokens, token_integer(4, 1));
+    token_list_push(&tokens, token_integer(3, 1));
     token_list_push(&tokens, token_new(TOKEN_RIGHT_PAREN, 1));
     token_list_push(&tokens, token_new(TOKEN_EOF, 1));
 
@@ -40,13 +40,13 @@ result_t test_ast_leaves(void) {
     assert(tree->num_children == 2);
 
     ast_node_t *left = tree->children[0];
-    assert(left->tag == TAG_RATIONAL);
-    assert_rationaleq(left->data, 4, 1);
+    assert(left->tag == TAG_INTEGER);
+    assert_inteq(left->data, 4);
     assert(left->num_children == 0);
 
     ast_node_t *right = tree->children[1];
-    assert(right->tag == TAG_RATIONAL);
-    assert_rationaleq(right->data, 3, 1);
+    assert(right->tag == TAG_INTEGER);
+    assert_inteq(right->data, 3);
     assert(right->num_children == 0);
 
     ast_node_free(tree);
@@ -68,15 +68,15 @@ result_t test_ast_nested(void) {
 
     // 3
     ast_node_t *left = tree->children[0];
-    assert(left->tag == TAG_RATIONAL);
+    assert(left->tag == TAG_INTEGER);
     assert(left->num_children == 0);
-    assert_rationaleq(left->data, 3, 1);
+    assert_inteq(left->data, 3);
 
     // 4
     ast_node_t *mid = tree->children[1];
-    assert(mid->tag == TAG_RATIONAL);
+    assert(mid->tag == TAG_INTEGER);
     assert(mid->num_children == 0);
-    assert_rationaleq(mid->data, 4, 1);
+    assert_inteq(mid->data, 4);
 
     // (- 4 1)
     ast_node_t *right = tree->children[2];
@@ -86,15 +86,15 @@ result_t test_ast_nested(void) {
 
     // 4
     ast_node_t *nested_left = right->children[0];
-    assert(nested_left->tag == TAG_RATIONAL);
+    assert(nested_left->tag == TAG_INTEGER);
     assert(nested_left->num_children == 0);
-    assert_rationaleq(nested_left->data, 4, 1);
+    assert_inteq(nested_left->data, 4);
 
     // 1
     ast_node_t *nested_right = right->children[1];
-    assert(nested_right->tag == TAG_RATIONAL);
+    assert(nested_right->tag == TAG_INTEGER);
     assert(nested_right->num_children == 0);
-    assert_rationaleq(nested_right->data, 1, 1);
+    assert_inteq(nested_right->data, 1);
 
     ast_node_free(tree);
     ast_builder_free(&b);

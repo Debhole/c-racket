@@ -29,7 +29,7 @@ add_library(c_racket_lib
         src/ast/ast_builder.h
         src/keyword.c
         src/keyword.h
-        src/tokens/token_type.c src/ast/ast_list.c src/ast/ast_list.h src/ast/ast_tag.h src/interpreter/interpreter.c src/interpreter/interpreter.h)
+        src/tokens/token_type.c src/ast/ast_list.c src/ast/ast_list.h src/ast/ast_tag.h src/interpreter/interpreter.c src/interpreter/interpreter.h src/interpreter/function_book.c src/interpreter/function_book.h src/interpreter/function.c src/interpreter/function.h)
 target_include_directories(c_racket_lib PUBLIC src)
 
 add_executable(c_racket src/main.c)

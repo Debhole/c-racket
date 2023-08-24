@@ -121,25 +121,17 @@ result_t test_scanner_numbers(void) {
     token_list_t tokens = scanner_get_tokens(&s);
 
     assert(tokens.len == 5);
-    assert(tokens.tokens[0].type == TOKEN_RATIONAL);
-    assert(tokens.tokens[1].type == TOKEN_RATIONAL);
-    assert(tokens.tokens[2].type == TOKEN_REAL);
-    assert(tokens.tokens[3].type == TOKEN_RATIONAL);
+    assert(tokens.tokens[0].type == TOKEN_SYMBOL);
+    assert_streq(tokens.tokens[0].data, "1/2");
 
-    rational_number_t *rational = (rational_number_t *) tokens.tokens[0].data;
-    assert(rational->numerator == 1);
-    assert(rational->denominator == 2);
+    assert(tokens.tokens[1].type == TOKEN_INTEGER);
+    assert_inteq(tokens.tokens[1].data, 123456789);
 
-    rational = (rational_number_t *) tokens.tokens[1].data;
-    assert(rational->numerator == 123456789);
-    assert(rational->denominator == 1);
+    assert(tokens.tokens[2].type == TOKEN_DOUBLE);
+    assert_double_approxeq(tokens.tokens[2].data, 0.5, 0.0001);
 
-    rational = (rational_number_t *) tokens.tokens[3].data;
-    assert(rational->numerator == 129);
-    assert(rational->denominator == 132);
-
-    real_number_t *real = (real_number_t *) tokens.tokens[2].data;
-    assert(real->value == 0.5);
+    assert(tokens.tokens[3].type == TOKEN_SYMBOL);
+    assert_streq(tokens.tokens[3].data, "129/132");
 
     scanner_free(&s);
     token_list_free(&tokens);
@@ -227,9 +219,8 @@ result_t test_scanner_all(void) {
     assert_symeq(tokens.tokens[25], "-");
     assert_symeq(tokens.tokens[26], "int");
 
-    assert(tokens.tokens[27].type == TOKEN_RATIONAL);
-    assert(((rational_number_t *)tokens.tokens[27].data)->numerator == 1);
-    assert(((rational_number_t *)tokens.tokens[27].data)->denominator == 1);
+    assert(tokens.tokens[27].type == TOKEN_INTEGER);
+    assert_inteq(tokens.tokens[27].data, 1);
 
     assert(tokens.tokens[28].type == TOKEN_RIGHT_PAREN);
     assert(tokens.tokens[29].type == TOKEN_RIGHT_PAREN);
@@ -245,9 +236,8 @@ result_t test_scanner_all(void) {
     assert(tokens.tokens[36].type == TOKEN_STRING);
     assert_streq("hello!", (char *)tokens.tokens[36].data);
 
-    assert(tokens.tokens[37].type == TOKEN_RATIONAL);
-    assert(((rational_number_t *)tokens.tokens[37].data)->numerator == 3);
-    assert(((rational_number_t *)tokens.tokens[37].data)->denominator == 1);
+    assert(tokens.tokens[37].type == TOKEN_INTEGER);
+    assert_inteq(tokens.tokens[37].data, 3);
 
     assert(tokens.tokens[38].type == TOKEN_RIGHT_PAREN);
     assert(tokens.tokens[39].type == TOKEN_EOF);
