@@ -11,11 +11,16 @@ ast_list_t ast_list_new(void) {
     };
 }
 
-ast_list_t ast_list_empty(void) {
-    return (ast_list_t){
-            .len = 0,
-            .capacity = 0,
-            .trees = NULL};
+ast_list_t ast_list_clone(ast_list_t *list) {
+    ast_list_t clone = ast_list_new();
+
+    for (unsigned int i = 0; i < list->len; i += 1) {
+        ast_node_t *node = ast_node_clone(list->trees[i]);
+
+        ast_list_push(&clone, node);
+    }
+
+    return clone;
 }
 
 void ast_list_free(ast_list_t *list) {

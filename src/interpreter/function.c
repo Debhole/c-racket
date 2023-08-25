@@ -243,3 +243,40 @@ ast_node_t *prim_string_append(ast_list_t *args) {
     free(buf);
     return eval;
 }
+
+/*
+ * Custom Function implementation
+ */
+
+custom_function_t custom_function_new(
+        const char *name,
+        ast_list_t *args,
+        bool precise_arity,
+        ast_node_t *definition
+) {
+    size_t size = strlen(name) + 1;
+    char *owned_name = malloc(size);
+    strcpy(owned_name, name);
+
+    ast_list_t owned_args = ast_list_clone(args);
+
+    ast_node_t *owned_def = ast_node_clone(definition);
+
+    return (custom_function_t) {
+        .name = owned_name,
+        .args = owned_args,
+        .precise_arity = precise_arity,
+        .definition = owned_def,
+    };
+}
+
+void custom_function_free(custom_function_t *fn) {
+    free(fn->name);
+    ast_list_free(&fn->args);
+    ast_node_free(fn->definition);
+
+    fn->name = NULL;
+    fn->definition = NULL;
+    fn->precise_arity = false;
+}
+

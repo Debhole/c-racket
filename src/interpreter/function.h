@@ -27,3 +27,18 @@ ast_node_t *prim_sub(ast_list_t *args);
 ast_node_t *prim_mul(ast_list_t *args);
 
 ast_node_t *prim_string_append(ast_list_t *args);
+
+typedef struct custom_function_t {
+    char *name;
+    ast_list_t args;
+    bool precise_arity;
+    ast_node_t *definition;
+} custom_function_t;
+
+custom_function_t custom_function_new(
+        const char *name,
+        ast_list_t *args,
+        bool precise_arity,
+        ast_node_t *definition
+        );
+void custom_function_free(custom_function_t *fn);

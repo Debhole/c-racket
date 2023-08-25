@@ -11,7 +11,7 @@ scanner_t scanner_new(const char *source) {
     size_t len = strlen(source);
 
     // This was the cause of one of the weirdest bugs I've ever had to
-    // deal with. I was accidentally only mallocing len rather than len+1.
+    // deal with. I was accidentally only mallocing plen rather than plen+1.
     // This happens to work, apparently, except when built with GCC outside
     // the debugger. So MSVC and GCC debugger builds worked fine, but GCC
     // no debugger crashed PRECISELY when source was 89 bytes long.

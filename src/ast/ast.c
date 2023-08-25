@@ -26,21 +26,25 @@ void ast_node_free(ast_node_t *node) {
 }
 
 ast_node_t *ast_node_clone(ast_node_t *node) {
-    ast_node_t *clone = malloc(sizeof(ast_node_t));
-    clone->tag = node->tag;
-    clone->num_children = node->num_children;
+    if (node) {
+        ast_node_t *clone = malloc(sizeof(ast_node_t));
+        clone->tag = node->tag;
+        clone->num_children = node->num_children;
 
-    clone->data_size = node->data_size;
-    clone->data = malloc(clone->data_size);
-    memcpy(clone->data, node->data, clone->data_size);
+        clone->data_size = node->data_size;
+        clone->data = malloc(clone->data_size);
+        memcpy(clone->data, node->data, clone->data_size);
 
-    clone->num_children = node->num_children;
-    clone->children = malloc(sizeof(ast_node_t *) * clone->num_children);
-    for (unsigned int i = 0; i < clone->num_children; i += 1) {
-        clone->children[i] = ast_node_clone(node->children[i]);
+        clone->num_children = node->num_children;
+        clone->children = malloc(sizeof(ast_node_t *) * clone->num_children);
+        for (unsigned int i = 0; i < clone->num_children; i += 1) {
+            clone->children[i] = ast_node_clone(node->children[i]);
+        }
+
+        return clone;
+    } else {
+        return NULL;
     }
-
-    return clone;
 }
 
 void ast_node_print(ast_node_t *node) {

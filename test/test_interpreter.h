@@ -84,22 +84,24 @@ result_t test_define_value(void) {
     return SUCCESS;
 }
 
-//result_t test_define(void) {
-//    interpreter_t interpreter = interpreter_new();
-//
-//    ast_list_t eval = interpreter_eval(&interpreter, "(define (add1 x) (+ x 1)) (add1 5)");
-//    assert(eval.len == 1);
-//    assert_inteq(eval.trees[0]->data, 6);
-//
-//    ast_list_free(&eval);
-//
-//    eval = interpreter_eval(&interpreter, "(add1 6) (add1 7)");
-//    assert(eval.len == 2);
-//    assert_inteq(eval.trees[0], 7);
-//    assert_inteq(eval.trees[1], 8);
-//
-//    ast_list_free(&eval);
-//    interpreter_free(&interpreter);
-//
-//    return SUCCESS;
-//}
+result_t test_define_fn(void) {
+    interpreter_t interpreter = interpreter_new();
+
+    ast_list_t eval = interpreter_eval(&interpreter, "(define (add1 x) (+ x 1))");
+    assert(eval.len == 0);
+
+    assert(interpreter.function_book.clen == 1);
+    assert_streq(interpreter.function_book.cfns[0].name, "add1");
+
+    ast_list_free(&eval);
+
+    eval = interpreter_eval(&interpreter, "(add1 6) (add1 7)");
+    assert(eval.len == 2);
+    assert_inteq(eval.trees[0]->data, 7);
+    assert_inteq(eval.trees[1]->data, 8);
+
+    ast_list_free(&eval);
+    interpreter_free(&interpreter);
+
+    return SUCCESS;
+}

@@ -38,6 +38,7 @@ int main(void) {
     record_test(test_string_functions);
 
     record_test(test_define_value);
+    record_test(test_define_fn);
 
     report_tests();
 }
