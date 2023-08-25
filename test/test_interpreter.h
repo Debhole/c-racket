@@ -30,6 +30,11 @@ result_t test_basic_functions(void) {
     assert(*((bool *)(eval.trees[1]->data)) == false);
 
     ast_list_free(&eval);
+
+    eval = interpreter_eval(&interpreter, "(number? -5.5)");
+    assert(*((bool *)(eval.trees[0]->data)) == true);
+
+    ast_list_free(&eval);
     interpreter_free(&interpreter);
 
     return SUCCESS;
@@ -99,6 +104,28 @@ result_t test_define_fn(void) {
     assert(eval.len == 2);
     assert_inteq(eval.trees[0]->data, 7);
     assert_inteq(eval.trees[1]->data, 8);
+
+    ast_list_free(&eval);
+    interpreter_free(&interpreter);
+
+    return SUCCESS;
+}
+
+result_t test_if_function(void) {
+    interpreter_t interpreter = interpreter_new();
+
+    ast_list_t eval = interpreter_eval(&interpreter, "(if #true 6 5) (if #false 6 5)");
+    assert(eval.len == 2);
+    assert_inteq(eval.trees[0]->data, 6);
+    assert_inteq(eval.trees[1]->data, 5);
+
+    ast_list_free(&eval);
+
+    eval = interpreter_eval(&interpreter, "(if (number? #true) (string-append \"TR\" \"UE\") (+ 6 5))\n"
+                                          "(if (number? -5.5) (string-append \"TR\" \"UE\") (+ 6 5))");
+    assert(eval.len == 2);
+    assert_inteq(eval.trees[0]->data, 11);
+    assert_streq(eval.trees[1]->data, "TRUE");
 
     ast_list_free(&eval);
     interpreter_free(&interpreter);

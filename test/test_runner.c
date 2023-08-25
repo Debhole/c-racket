@@ -39,6 +39,7 @@ int main(void) {
 
     record_test(test_define_value);
     record_test(test_define_fn);
+    record_test(test_if_function);
 
     report_tests();
 }

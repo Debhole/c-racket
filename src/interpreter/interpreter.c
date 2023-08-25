@@ -54,6 +54,10 @@ ast_list_t interpreter_eval(interpreter_t *interpreter, const char *source) {
 }
 
 ast_node_t *interpreter_eval_node(interpreter_t *interpreter, ast_node_t *node) {
+    if (!node) {
+        return NULL;
+    }
+
     switch (node->tag) {
         case TAG_EXPRESSION: {
             char *fn = (char *) node->data;
@@ -70,8 +74,11 @@ ast_node_t *interpreter_eval_node(interpreter_t *interpreter, ast_node_t *node) 
             return NULL;
         }
 
-        case TAG_KEYWORD:
-            return NULL;
+        case TAG_KEYWORD: {
+            char *kw = (char *) node->data;
+
+            return interpreter_eval_kw(interpreter, kw, node->children, node->num_children);
+        }
 
         case TAG_INTEGER:
         case TAG_DOUBLE:
@@ -111,7 +118,7 @@ ast_node_t *interpreter_eval_fn(interpreter_t *interpreter, const char *fn, ast_
         if (arity_matches) {
             definition_book_begin_scope(&interpreter->definition_book);
             for (unsigned int i = 0; i < eval_args.len; i += 1) {
-                char *name = (char *)cfn.args.trees[i]->data;
+                char *name = (char *) cfn.args.trees[i]->data;
 
                 definition_book_push(&interpreter->definition_book, definition_new(name, eval_args.trees[i]));
             }
@@ -129,6 +136,26 @@ ast_node_t *interpreter_eval_name(interpreter_t *interpreter, const char *name) 
     definition_t def;
     if (definition_book_contains(&interpreter->definition_book, name, &def)) {
         return ast_node_clone(def.value);
+    } else {
+        return NULL;
+    }
+}
+
+ast_node_t *interpreter_eval_kw(interpreter_t *interpreter, const char *name, ast_node_t **args, unsigned int num_args) {
+    if ((strcmp(name, "if") == 0) && (num_args == 3)) {
+        ast_node_t *eval_question = interpreter_eval_node(interpreter, args[0]);
+        if (eval_question->tag == TAG_BOOLEAN) {
+            bool result = *(bool *) eval_question->data;
+
+            ast_node_free(eval_question);
+            if (result) {
+                return interpreter_eval_node(interpreter, args[1]);
+            } else {
+                return interpreter_eval_node(interpreter, args[2]);
+            }
+        } else {
+            return NULL;
+        }
     } else {
         return NULL;
     }

@@ -107,6 +107,8 @@ ast_node_t *ast_builder_next_expression(ast_builder_t *b, token_type_t end) {
                 tag = TAG_DEFINITION;
             } else if (strcmp(kw, "cond") == 0) {
                 tag = TAG_COND_CLAUSE;
+            } else {
+                tag = TAG_KEYWORD;
             }
         }
 
