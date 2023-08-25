@@ -37,5 +37,7 @@ int main(void) {
     record_test(test_complex_functions);
     record_test(test_string_functions);
 
+    record_test(test_define_value);
+
     report_tests();
 }

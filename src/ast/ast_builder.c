@@ -100,7 +100,17 @@ ast_node_t *ast_builder_next_expression(ast_builder_t *b, token_type_t end) {
         unsigned int num_children;
         ast_list_deform(&children, &raw_children, &num_children);
 
-        return ast_node_new(TAG_EXPRESSION, expr_head.data, expr_head.data_size, num_children, raw_children);
+        ast_tag_t tag = TAG_EXPRESSION;
+        if (expr_head.type == TOKEN_KEYWORD) {
+            char *kw = (char *)expr_head.data;
+            if (strcmp(kw, "define") == 0) {
+                tag = TAG_DEFINITION;
+            } else if (strcmp(kw, "cond") == 0) {
+                tag = TAG_COND_CLAUSE;
+            }
+        }
+
+        return ast_node_new(tag, expr_head.data, expr_head.data_size, num_children, raw_children);
     } else {
         return NULL;
     }

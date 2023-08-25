@@ -40,7 +40,7 @@ result_t test_ast_list(void) {
 
     // (define Hello "World!")
     assert(ast_list_get(&trees, 3, &tree));
-    assert(tree->tag == TAG_EXPRESSION);
+    assert(tree->tag == TAG_DEFINITION);
     assert(tree->num_children == 2);
     assert_streq((char *)tree->data, "define");
 

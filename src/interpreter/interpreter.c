@@ -17,6 +17,7 @@ interpreter_t interpreter_new(void) {
 
     return (interpreter_t){
             .function_book = function_book,
+            .definition_book = definition_book_new(),
     };
 }
 
@@ -60,16 +61,28 @@ ast_node_t *interpreter_eval_node(interpreter_t *interpreter, ast_node_t *node) 
         }
 
         case TAG_COND_CLAUSE:
-        case TAG_DEFINITION:
+            return NULL;
+
+        case TAG_DEFINITION: {
+            interpreter_eval_definition(interpreter, node);
+
+            return NULL;
+        }
+
+        case TAG_KEYWORD:
             return NULL;
 
         case TAG_INTEGER:
         case TAG_DOUBLE:
         case TAG_STRING:
         case TAG_BOOLEAN:
-        case TAG_KEYWORD:
-        case TAG_SYMBOL:
             return ast_node_clone(node);
+
+        case TAG_SYMBOL: {
+            char *name = (char *)node->data;
+
+            return interpreter_eval_name(interpreter, name);
+        }
 
         default:
             return NULL;
@@ -94,4 +107,38 @@ ast_node_t *interpreter_eval_fn(interpreter_t *interpreter, const char *fn, ast_
 
     ast_list_free(&eval_args);
     return eval_node;
+}
+
+ast_node_t *interpreter_eval_name(interpreter_t *interpreter, const char *name) {
+    definition_t def;
+    if (definition_book_contains(&interpreter->definition_book, name, &def)) {
+        return ast_node_clone(def.value);
+    } else {
+        return NULL;
+    }
+}
+
+bool interpreter_eval_definition(interpreter_t *interpreter, ast_node_t *node) {
+    if (node->num_children == 2) {
+        // Either a function or a variable
+
+        if (node->children[0]->tag == TAG_SYMBOL) {
+            char *name = (char *)node->children[0]->data;
+
+            if (definition_book_contains(&interpreter->definition_book, name, NULL)) {
+                return false;
+            } else {
+                ast_node_t *eval = interpreter_eval_node(interpreter, node->children[1]);
+
+                definition_book_push(&interpreter->definition_book, definition_new(name, eval));
+                ast_node_free(eval);
+
+                return true;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
 }
