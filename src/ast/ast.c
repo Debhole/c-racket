@@ -42,3 +42,26 @@ ast_node_t *ast_node_clone(ast_node_t *node) {
 
     return clone;
 }
+
+void ast_node_print(ast_node_t *node) {
+    if (node) {
+        switch (node->tag) {
+            case TAG_INTEGER:
+                printf("%d\n", *(int *) node->data);
+                break;
+            case TAG_DOUBLE:
+                printf("%f\n", *(double *) node->data);
+                break;
+            case TAG_STRING:
+                printf("%s\n", (char *) node->data);
+                break;
+            case TAG_BOOLEAN: {
+                const char *value = *(bool *) node->data ? "#true" : "#false";
+                printf("%s\n", value);
+                break;
+            }
+            default:
+                break;
+        }
+    }
+}

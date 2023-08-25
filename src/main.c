@@ -1,3 +1,4 @@
+#include "interpreter/interpreter.h"
 #include "scanner/scanner.h"
 #include "tokens/token.h"
 #include "tokens/token_list.h"
@@ -12,24 +13,18 @@ int main(void) {
     char input[2048];
     char *result;
 
-    scanner_t s;
+    interpreter_t interpreter = interpreter_new();
 
     do {
         printf(">> ");
 
         result = fgets(input, 2048, stdin);
 
-        s = scanner_new(input);
-        token_list_t list = scanner_get_tokens(&s);
+        ast_list_t nodes = interpreter_eval(&interpreter, result);
 
-        token_t tmp;
-        for (unsigned int i = 0; i < list.len; i++) {
-            token_list_get(&list, i, &tmp);
-            token_print(&tmp);
+        for (unsigned int i = 0; i < nodes.len; i += 1) {
+            ast_node_print(nodes.trees[i]);
         }
-
-        scanner_free(&s);
-        token_list_free(&list);
     } while (result != NULL);
 
     return 0;

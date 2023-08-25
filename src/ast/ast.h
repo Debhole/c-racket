@@ -15,3 +15,5 @@ ast_node_t *ast_node_new(ast_tag_t tag, void *data, size_t data_size, unsigned i
 void ast_node_free(ast_node_t *node);
 
 ast_node_t *ast_node_clone(ast_node_t *node);
+
+void ast_node_print(ast_node_t *node);
