@@ -13,6 +13,8 @@ interpreter_t interpreter_new(void) {
     function_book_push(&function_book, primitive_function_new("-", 1, false, &prim_sub));
     function_book_push(&function_book, primitive_function_new("*", 0, false, &prim_mul));
 
+    function_book_push(&function_book, primitive_function_new("string-append", 0, false, &prim_string_append));
+
     return (interpreter_t){
             .function_book = function_book,
     };
@@ -89,37 +91,6 @@ ast_node_t *interpreter_eval_fn(interpreter_t *interpreter, const char *fn, ast_
             eval_node = pfn.fn(&eval_args);
         }
     }
-
-//    if (strcmp(fn, "boolean?") == 0) {
-//        if (eval_args.len == 1) {
-//            ast_node_t *ref_node;
-//            bool result = ast_list_get(&eval_args, 0, &ref_node);
-//            bool eval = (result && ref_node->tag == TAG_BOOLEAN) ? true : false;
-//            eval_node = ast_node_new(TAG_BOOLEAN, &eval, sizeof(bool), 0, NULL);
-//        } else {
-//            eval_node = NULL;
-//        }
-//    } else if (strcmp(fn, "number?") == 0) {
-//        if (eval_args.len == 1) {
-//            ast_node_t *ref_node;
-//            bool result = ast_list_get(&eval_args, 0, &ref_node);
-//            bool eval = (result && (ref_node->tag == TAG_INTEGER || ref_node->tag == TAG_DOUBLE)) ? true : false;
-//            eval_node = ast_node_new(TAG_BOOLEAN, &eval, sizeof(bool), 0, NULL);
-//        } else {
-//            eval_node = NULL;
-//        }
-//    } else if (strcmp(fn, "symbol?") == 0) {
-//        if (eval_args.len == 1) {
-//            ast_node_t *ref_node;
-//            bool result = ast_list_get(&eval_args, 0, &ref_node);
-//            bool eval = (result && ref_node->tag == TAG_SYMBOL) ? true : false;
-//            eval_node = ast_node_new(TAG_BOOLEAN, &eval, sizeof(bool), 0, NULL);
-//        } else {
-//            eval_node = NULL;
-//        }
-//    } else {
-//        eval_node = NULL;
-//    }
 
     ast_list_free(&eval_args);
     return eval_node;

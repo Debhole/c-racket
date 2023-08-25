@@ -52,3 +52,17 @@ result_t test_complex_functions(void) {
 
     return SUCCESS;
 }
+
+result_t test_string_functions(void) {
+    interpreter_t interpreter = interpreter_new();
+
+    ast_list_t eval = interpreter_eval(&interpreter, "(string-append) (string-append \"Hello\" \", \" \"World!\")");
+    assert(eval.len == 2);
+    assert_streq(eval.trees[0]->data, "");
+    assert_streq(eval.trees[1]->data, "Hello, World!");
+
+    ast_list_free(&eval);
+    interpreter_free(&interpreter);
+
+    return SUCCESS;
+}

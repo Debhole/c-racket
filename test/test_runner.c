@@ -35,6 +35,7 @@ int main(void) {
 
     record_test(test_basic_functions);
     record_test(test_complex_functions);
+    record_test(test_string_functions);
 
     report_tests();
 }

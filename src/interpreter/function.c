@@ -198,3 +198,48 @@ ast_node_t *prim_mul(ast_list_t *args) {
 
     return ast_node_new(TAG_INTEGER, &prod, sizeof(int), 0, NULL);
 }
+
+ast_node_t *prim_string_append(ast_list_t *args) {
+    unsigned int buf_size = 128;
+    char *buf = malloc(128);
+    memset(buf, 0, buf_size);
+    unsigned int len = 0;
+
+    for (unsigned int i = 0; i < args->len; i += 1) {
+        ast_node_t *arg;
+        if (!ast_list_get_clone(args, i, &arg)) {
+            break;
+        } else {
+            ast_list_t tmp = ast_list_new();
+            ast_list_push(&tmp, arg);
+
+            ast_node_t *result_node = prim_isstring(&tmp);
+            bool is_string = *(bool *) (result_node->data);
+            ast_node_free(result_node);
+
+            if (is_string) {
+                char *str = (char *)arg->data;
+                len += strlen(str);
+
+                while (buf_size <= len) {
+                    buf_size *= 2;
+                    char *tmp_buf = realloc(buf, buf_size);
+
+                    if (tmp_buf) {
+                        buf = tmp_buf;
+                    }
+
+                    memset(buf + len, 0, buf_size - len);
+                }
+
+                strcat(buf, str);
+            }
+
+            ast_list_free(&tmp);
+        }
+    }
+
+    ast_node_t *eval = ast_node_new(TAG_STRING, buf, len + 1, 0, NULL);
+    free(buf);
+    return eval;
+}

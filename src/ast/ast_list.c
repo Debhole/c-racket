@@ -4,24 +4,25 @@ ast_list_t ast_list_new(void) {
     int capacity = 8;
     ast_node_t **trees = malloc(sizeof(ast_node_t *) * capacity);
 
-    return (ast_list_t) {
-        .len = 0,
-        .capacity = capacity,
-        .trees = trees,
+    return (ast_list_t){
+            .len = 0,
+            .capacity = capacity,
+            .trees = trees,
     };
 }
 
 ast_list_t ast_list_empty(void) {
-    return (ast_list_t) {
-        .len = 0,
-        .capacity = 0,
-        .trees = NULL
-    };
+    return (ast_list_t){
+            .len = 0,
+            .capacity = 0,
+            .trees = NULL};
 }
 
 void ast_list_free(ast_list_t *list) {
     for (unsigned int i = 0; i < list->len; i += 1) {
-        ast_node_free(list->trees[i]);
+        if (list->trees[i]) {
+            ast_node_free(list->trees[i]);
+        }
     }
 
     free(list->trees);
@@ -31,10 +32,15 @@ void ast_list_free(ast_list_t *list) {
 }
 
 void ast_list_deform(ast_list_t *list, ast_node_t ***raw_trees, unsigned int *num_children) {
-    ast_node_t **tmp_list = realloc(list->trees, sizeof(ast_node_t *) * list->len);
+    if (list->len > 0) {
+        ast_node_t **tmp_list = realloc(list->trees, sizeof(ast_node_t *) * list->len);
 
-    if (tmp_list) {
-        list->trees = tmp_list;
+        if (tmp_list) {
+            list->trees = tmp_list;
+        }
+    } else {
+        free(list->trees);
+        list->trees = NULL;
     }
 
     *raw_trees = list->trees;
