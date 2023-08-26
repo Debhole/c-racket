@@ -42,6 +42,7 @@ int main(void) {
     record_test(test_if_function);
     record_test(test_and_function);
     record_test(test_or_function);
+    record_test(test_numeq_function);
 
     report_tests();
 }

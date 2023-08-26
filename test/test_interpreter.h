@@ -162,3 +162,17 @@ result_t test_or_function(void) {
 
     return SUCCESS;
 }
+
+result_t test_numeq_function(void) {
+    interpreter_t interpreter = interpreter_new();
+
+    ast_list_t eval = interpreter_eval(&interpreter, "(= 5 (+ 3 2) (+ 1 2 2) 5.0) (= 5 5.0 5.000001)");
+    assert(eval.len == 2);
+    assert(*((bool *)(eval.trees[0]->data)) == true);
+    assert(*((bool *)(eval.trees[1]->data)) == false);
+
+    ast_list_free(&eval);
+    interpreter_free(&interpreter);
+
+    return SUCCESS;
+}

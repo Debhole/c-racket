@@ -12,6 +12,7 @@ interpreter_t interpreter_new(void) {
     function_book_push_primitive(&function_book, primitive_function_new("+", 0, false, &prim_add));
     function_book_push_primitive(&function_book, primitive_function_new("-", 1, false, &prim_sub));
     function_book_push_primitive(&function_book, primitive_function_new("*", 0, false, &prim_mul));
+    function_book_push_primitive(&function_book, primitive_function_new("=", 1, false, &prim_numeq));
 
     function_book_push_primitive(&function_book, primitive_function_new("string-append", 0, false, &prim_string_append));
 

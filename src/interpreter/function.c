@@ -199,6 +199,62 @@ ast_node_t *prim_mul(ast_list_t *args) {
     return ast_node_new(TAG_INTEGER, &prod, sizeof(int), 0, NULL);
 }
 
+ast_node_t *prim_numeq(ast_list_t *args) {
+    if (args->len == 0) {
+        return NULL;
+    } else {
+        if (args->trees[0]->tag == TAG_INTEGER) {
+            int cmp = *(int *)args->trees[0]->data;
+
+            for (unsigned int i = 0; i < args->len; i += 1) {
+                if (args->trees[i]->tag == TAG_INTEGER) {
+                    int value = *(int *)args->trees[i]->data;
+
+                    if (cmp != value) {
+                        bool data = false;
+                        return ast_node_new(TAG_BOOLEAN, &data, sizeof(bool), 0, NULL);
+                    }
+                } else {
+                    double value = *(double *)args->trees[i]->data;
+
+                    if (cmp != value) {
+                        bool data = false;
+                        return ast_node_new(TAG_BOOLEAN, &data, sizeof(bool), 0, NULL);
+                    }
+                }
+            }
+
+            bool data = true;
+            return ast_node_new(TAG_BOOLEAN, &data, sizeof(bool), 0, NULL);
+        } else if (args->trees[0]->tag == TAG_DOUBLE) {
+            double cmp = *(double *)args->trees[0]->data;
+
+            for (unsigned int i = 0; i < args->len; i += 1) {
+                if (args->trees[i]->tag == TAG_INTEGER) {
+                    int value = *(int *)args->trees[i]->data;
+
+                    if (cmp != value) {
+                        bool data = false;
+                        return ast_node_new(TAG_BOOLEAN, &data, sizeof(bool), 0, NULL);
+                    }
+                } else {
+                    double value = *(double *)args->trees[i]->data;
+
+                    if (cmp != value) {
+                        bool data = false;
+                        return ast_node_new(TAG_BOOLEAN, &data, sizeof(bool), 0, NULL);
+                    }
+                }
+            }
+
+            bool data = true;
+            return ast_node_new(TAG_BOOLEAN, &data, sizeof(bool), 0, NULL);
+        } else {
+            return false;
+        }
+    }
+}
+
 ast_node_t *prim_string_append(ast_list_t *args) {
     unsigned int buf_size = 128;
     char *buf = malloc(128);

@@ -25,6 +25,7 @@ ast_node_t *prim_isstring(ast_list_t *args);
 ast_node_t *prim_add(ast_list_t *args);
 ast_node_t *prim_sub(ast_list_t *args);
 ast_node_t *prim_mul(ast_list_t *args);
+ast_node_t *prim_numeq(ast_list_t *args);
 
 ast_node_t *prim_string_append(ast_list_t *args);
 
