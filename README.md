@@ -25,12 +25,12 @@ and is not suitable for any real projects.
 
 ---
 
-## Building for GNU/MinGW
+## Building from Source
 
 In the project root directory
 ```
 cmake -S . -B build
-(cd build && make)
+(cd build && cmake --build .)
 ```
 
 ## Running the C-Racket Interpreter

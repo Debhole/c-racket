@@ -3,11 +3,9 @@ project(c_racket C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_compile_options(-g3 -O0)
-
 if (MSVC)
     # warning level 4 and all warnings as errors
-    add_compile_options(/W4 /WX)
+    add_compile_options(/W4 /WX /wd4996)
 else()
     # lots of warnings and all warnings as errors
     add_compile_options(-Wall -Wextra -pedantic -Werror)

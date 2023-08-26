@@ -7,7 +7,7 @@ primitive_function_t primitive_function_new(
         ast_node_t *(*fn)(ast_list_t *args)) {
     size_t size = strlen(name) + 1;
     char *owned_name = malloc(size);
-    strcpy(owned_name, name);
+    strcpy_s(owned_name, size, name);
 
     return (primitive_function_t){
             .name = owned_name,
@@ -259,7 +259,7 @@ ast_node_t *prim_string_append(ast_list_t *args) {
     unsigned int buf_size = 128;
     char *buf = malloc(128);
     memset(buf, 0, buf_size);
-    unsigned int len = 0;
+    size_t len = 0;
 
     for (unsigned int i = 0; i < args->len; i += 1) {
         ast_node_t *arg;
@@ -288,7 +288,7 @@ ast_node_t *prim_string_append(ast_list_t *args) {
                     memset(buf + len, 0, buf_size - len);
                 }
 
-                strcat(buf, str);
+                strcat_s(buf, len + 1, str);
             }
 
             ast_list_free(&tmp);
@@ -312,7 +312,7 @@ custom_function_t custom_function_new(
 ) {
     size_t size = strlen(name) + 1;
     char *owned_name = malloc(size);
-    strcpy(owned_name, name);
+    strcpy_s(owned_name, size, name);
 
     ast_list_t owned_args = ast_list_clone(args);
 

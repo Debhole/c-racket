@@ -11,9 +11,10 @@ int main(int argc, char **argv) {
 
     if (argc >= 2) {
         for (int i = 1; i < argc; i += 1) {
-            FILE *file = fopen(argv[i], "rb");
+            FILE *file;
+            int result = fopen_s(&file, argv[i], "rb");
 
-            if (file) {
+            if (result == 0) {
                 fseek(file, 0L, SEEK_END);
                 int size = ftell(file);
                 fseek(file, 0L, SEEK_SET);
@@ -29,6 +30,7 @@ int main(int argc, char **argv) {
                 interpreter_eval(&interpreter, source);
 
                 free(source);
+                free(buf);
                 fclose(file);
             }
         }

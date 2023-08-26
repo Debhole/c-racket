@@ -3,7 +3,7 @@
 definition_t definition_new(const char *name, ast_node_t *value) {
     size_t size = strlen(name) + 1;
     char *owned_name = malloc(size);
-    strcpy(owned_name, name);
+    strcpy_s(owned_name, size, name);
 
     ast_node_t *owned_value = ast_node_clone(value);
     return (definition_t) {

@@ -17,7 +17,13 @@ ast_list_t ast_builder_get_trees(ast_builder_t *b) {
     ast_list_t trees = ast_list_new();
 
     ast_node_t *tree;
-    while ((tree = ast_builder_next_tree(b))) {
+    while (true) {
+        tree = ast_builder_next_tree(b);
+
+        if (!tree) {
+            break;
+        }
+
         if (!ast_list_push(&trees, tree)) {
             // Handle error if fails to push tree
         }
