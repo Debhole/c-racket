@@ -132,3 +132,33 @@ result_t test_if_function(void) {
 
     return SUCCESS;
 }
+
+result_t test_and_function(void) {
+    interpreter_t interpreter = interpreter_new();
+
+    ast_list_t eval = interpreter_eval(&interpreter, "(and #true #true (number? 6))\n"
+                                                     "(and #true (string? \"string\") (number? #true))");
+    assert(eval.len == 2);
+    assert(*((bool *)(eval.trees[0]->data)) == true);
+    assert(*((bool *)(eval.trees[1]->data)) == false);
+
+    ast_list_free(&eval);
+    interpreter_free(&interpreter);
+
+    return SUCCESS;
+}
+
+result_t test_or_function(void) {
+    interpreter_t interpreter = interpreter_new();
+
+    ast_list_t eval = interpreter_eval(&interpreter, "(or #false #false (number? #false) (string? \"true!\"))\n"
+                                                     "(or #false #false (string? 5))");
+    assert(eval.len == 2);
+    assert(*((bool *)(eval.trees[0]->data)) == true);
+    assert(*((bool *)(eval.trees[1]->data)) == false);
+
+    ast_list_free(&eval);
+    interpreter_free(&interpreter);
+
+    return SUCCESS;
+}

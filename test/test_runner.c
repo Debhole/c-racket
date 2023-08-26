@@ -40,6 +40,8 @@ int main(void) {
     record_test(test_define_value);
     record_test(test_define_fn);
     record_test(test_if_function);
+    record_test(test_and_function);
+    record_test(test_or_function);
 
     report_tests();
 }

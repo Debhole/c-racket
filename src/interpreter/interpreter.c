@@ -142,7 +142,19 @@ ast_node_t *interpreter_eval_name(interpreter_t *interpreter, const char *name) 
 }
 
 ast_node_t *interpreter_eval_kw(interpreter_t *interpreter, const char *name, ast_node_t **args, unsigned int num_args) {
-    if ((strcmp(name, "if") == 0) && (num_args == 3)) {
+    if (strcmp(name, "if") == 0) {
+        return interpreter_eval_if(interpreter, args, num_args);
+    } else if (strcmp(name, "and") == 0) {
+        return interpreter_eval_and(interpreter, args, num_args);
+    } else if (strcmp(name, "or") == 0) {
+        return interpreter_eval_or(interpreter, args, num_args);
+    } else {
+        return NULL;
+    }
+}
+
+ast_node_t *interpreter_eval_if(interpreter_t *interpreter, ast_node_t **args, unsigned int num_args) {
+    if (num_args == 3) {
         ast_node_t *eval_question = interpreter_eval_node(interpreter, args[0]);
         if (eval_question->tag == TAG_BOOLEAN) {
             bool result = *(bool *) eval_question->data;
@@ -159,6 +171,40 @@ ast_node_t *interpreter_eval_kw(interpreter_t *interpreter, const char *name, as
     } else {
         return NULL;
     }
+}
+
+ast_node_t *interpreter_eval_and(interpreter_t *interpreter, ast_node_t **args, unsigned int num_args) {
+    for (unsigned int i = 0; i < num_args; i += 1) {
+        ast_node_t *eval = interpreter_eval_node(interpreter, args[i]);
+
+        bool result = (eval->tag == TAG_BOOLEAN) && (*(bool *) eval->data);
+        ast_node_free(eval);
+
+        if (!result) {
+            bool data = false;
+            return ast_node_new(TAG_BOOLEAN, &data, sizeof(bool), 0, NULL);
+        }
+    }
+
+    bool data = true;
+    return ast_node_new(TAG_BOOLEAN, &data, sizeof(bool), 0, NULL);
+}
+
+ast_node_t *interpreter_eval_or(interpreter_t *interpreter, ast_node_t **args, unsigned int num_args) {
+    for (unsigned int i = 0; i < num_args; i += 1) {
+        ast_node_t *eval = interpreter_eval_node(interpreter, args[i]);
+
+        bool result = (eval->tag == TAG_BOOLEAN) && (*(bool *) eval->data);
+        ast_node_free(eval);
+
+        if (result) {
+            bool data = true;
+            return ast_node_new(TAG_BOOLEAN, &data, sizeof(bool), 0, NULL);
+        }
+    }
+
+    bool data = false;
+    return ast_node_new(TAG_BOOLEAN, &data, sizeof(bool), 0, NULL);
 }
 
 bool interpreter_eval_definition(interpreter_t *interpreter, ast_node_t *node) {
