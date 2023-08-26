@@ -335,4 +335,3 @@ void custom_function_free(custom_function_t *fn) {
     fn->definition = NULL;
     fn->precise_arity = false;
 }
-
