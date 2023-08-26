@@ -1,0 +1,7 @@
+(define (str-repeat str i)
+    (if (= i 0)
+        ""
+        (string-append str (str-repeat str (- i 1)))))
+
+"If str-repeat works, the next line is \"Hello!Hello!Hello!\""
+(str-repeat "Hello!" 3)
