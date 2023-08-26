@@ -225,7 +225,7 @@ bool interpreter_eval_definition(interpreter_t *interpreter, ast_node_t *node) {
 
                 return true;
             }
-        } else if (node->children[1]->tag == TAG_EXPRESSION) {
+        } else if (node->children[0]->tag == TAG_EXPRESSION) {
             ast_node_t *fn_head = node->children[0];
             ast_node_t *fn_body = node->children[1];
             char *fn_name = (char *) fn_head->data;

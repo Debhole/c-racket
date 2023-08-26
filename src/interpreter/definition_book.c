@@ -80,4 +80,6 @@ void definition_book_end_scope(definition_book_t *book) {
             book->len -= 1;
         }
     }
+
+    book->scope_idx -= 1;
 }

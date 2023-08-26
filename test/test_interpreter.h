@@ -10,29 +10,29 @@ result_t test_basic_functions(void) {
     ast_list_t eval = interpreter_eval(&interpreter, "(boolean? #true)");
     assert(eval.len == 1);
     assert(eval.trees[0]->data);
-    assert(*((bool *)(eval.trees[0]->data)) == true);
+    assert(*((bool *) (eval.trees[0]->data)) == true);
 
     ast_list_free(&eval);
 
     eval = interpreter_eval(&interpreter, "(number? #false)\n");
     assert(eval.len == 1);
     assert(eval.trees[0]->data);
-    assert(*((bool *)(eval.trees[0]->data)) == false);
+    assert(*((bool *) (eval.trees[0]->data)) == false);
 
     ast_list_free(&eval);
 
     eval = interpreter_eval(&interpreter, "(boolean? (number? 100.1))\n(number? (number? 0.5))");
     assert(eval.len == 2);
     assert(eval.trees[0]->data);
-    assert(*((bool *)(eval.trees[0]->data)) == true);
+    assert(*((bool *) (eval.trees[0]->data)) == true);
 
     assert(eval.trees[1]->data);
-    assert(*((bool *)(eval.trees[1]->data)) == false);
+    assert(*((bool *) (eval.trees[1]->data)) == false);
 
     ast_list_free(&eval);
 
     eval = interpreter_eval(&interpreter, "(number? -5.5)");
-    assert(*((bool *)(eval.trees[0]->data)) == true);
+    assert(*((bool *) (eval.trees[0]->data)) == true);
 
     ast_list_free(&eval);
     interpreter_free(&interpreter);
@@ -139,8 +139,8 @@ result_t test_and_function(void) {
     ast_list_t eval = interpreter_eval(&interpreter, "(and #true #true (number? 6))\n"
                                                      "(and #true (string? \"string\") (number? #true))");
     assert(eval.len == 2);
-    assert(*((bool *)(eval.trees[0]->data)) == true);
-    assert(*((bool *)(eval.trees[1]->data)) == false);
+    assert(*((bool *) (eval.trees[0]->data)) == true);
+    assert(*((bool *) (eval.trees[1]->data)) == false);
 
     ast_list_free(&eval);
     interpreter_free(&interpreter);
@@ -154,8 +154,8 @@ result_t test_or_function(void) {
     ast_list_t eval = interpreter_eval(&interpreter, "(or #false #false (number? #false) (string? \"true!\"))\n"
                                                      "(or #false #false (string? 5))");
     assert(eval.len == 2);
-    assert(*((bool *)(eval.trees[0]->data)) == true);
-    assert(*((bool *)(eval.trees[1]->data)) == false);
+    assert(*((bool *) (eval.trees[0]->data)) == true);
+    assert(*((bool *) (eval.trees[1]->data)) == false);
 
     ast_list_free(&eval);
     interpreter_free(&interpreter);
@@ -168,11 +168,39 @@ result_t test_numeq_function(void) {
 
     ast_list_t eval = interpreter_eval(&interpreter, "(= 5 (+ 3 2) (+ 1 2 2) 5.0) (= 5 5.0 5.000001)");
     assert(eval.len == 2);
-    assert(*((bool *)(eval.trees[0]->data)) == true);
-    assert(*((bool *)(eval.trees[1]->data)) == false);
+    assert(*((bool *) (eval.trees[0]->data)) == true);
+    assert(*((bool *) (eval.trees[1]->data)) == false);
 
     ast_list_free(&eval);
     interpreter_free(&interpreter);
+
+    return SUCCESS;
+}
+
+result_t test_complex_function(void) {
+    interpreter_t interpreter = interpreter_new();
+
+    char source[] = "(define (fib x)\n"
+                    "  (if (= x 1)\n"
+                    "    1\n"
+                    "    (if (= x 0)\n"
+                    "      0\n"
+                    "      (+ (fib (- x 1)) (fib (- x 2))))))";
+    ast_list_t eval = interpreter_eval(&interpreter, source);
+
+    ast_list_free(&eval);
+
+//    eval = interpreter_eval(&interpreter, "(fib 2) (fib 3) (fib 4) (fib 5) (fib 6) (fib 7)");
+//    assert(eval.len == 6);
+//    assert_inteq(eval.trees[0]->data, 1);
+//    assert_inteq(eval.trees[1]->data, 2);
+//    assert_inteq(eval.trees[2]->data, 3);
+//    assert_inteq(eval.trees[3]->data, 5);
+//    assert_inteq(eval.trees[4]->data, 8);
+//    assert_inteq(eval.trees[5]->data, 13);
+
+    eval = interpreter_eval(&interpreter, "(fib 3)");
+    assert_inteq(eval.trees[0]->data, 2);
 
     return SUCCESS;
 }
