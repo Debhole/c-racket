@@ -429,7 +429,23 @@ void scanner_jump_endl(scanner_t *s) {
 }
 
 bool is_delimiter(char c) {
-    const char delimiters[] = "()[]{}\",'`;";
-
-    return (strchr(delimiters, c) != NULL) || isspace(c);
+    switch (c) {
+        case '(':
+        case ')':
+        case '[':
+        case ']':
+        case '{':
+        case '}':
+        case '\"':
+        case ',':
+        case '\'':
+        case ';':
+        case ' ':
+        case '\t':
+        case '\n':
+        case '\r':
+            return true;
+        default:
+            return false;
+    }
 }
