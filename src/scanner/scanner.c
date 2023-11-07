@@ -6,6 +6,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 scanner_t scanner_new(const char *source) {
     size_t len = strlen(source);
@@ -428,24 +429,22 @@ void scanner_jump_endl(scanner_t *s) {
     } while (curr != '\0' && curr != '\n');
 }
 
+// Define a lookup table for delimiters
 bool is_delimiter(char c) {
-    switch (c) {
-        case '(':
-        case ')':
-        case '[':
-        case ']':
-        case '{':
-        case '}':
-        case '\"':
-        case ',':
-        case '\'':
-        case ';':
-        case ' ':
-        case '\t':
-        case '\n':
-        case '\r':
-            return true;
-        default:
-            return false;
+    static bool is_delimiter_table[256] = {0};
+    static bool initialized = false;
+
+    if (!initialized) {
+        const char delimiters[] = "()[],{}\",'`;";
+        for (int i = 0; delimiters[i] != '\0'; i++) {
+            is_delimiter_table[(unsigned char)delimiters[i]] = true;
+        }
+        // Set whitespace characters as delimiters
+        is_delimiter_table[' '] = true;
+        is_delimiter_table['\t'] = true;
+        initialized = true;
     }
+
+    return is_delimiter_table[(unsigned char)c];
 }
+
