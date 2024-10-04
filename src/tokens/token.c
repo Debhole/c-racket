@@ -122,35 +122,42 @@ token_t token_error(const char *message, unsigned int line) {
     };
 }
 
-void token_print(const token_t *t) {
-    const char *token_type = token_type_to_string(t->type);
+void print_string(const token_t *t) {
+    printf("[%s - \"%s\" - Line %d]\n", token_type_to_string(t->type), (const char *)t->data, t->line);
+}
 
-    switch (t->type) {
-        case TOKEN_STRING:
-            printf("[%s -\"%s\" - Line %d ]\n", token_type, (const char *) t->data, t->line);
-            break;
-        case TOKEN_INTEGER: {
-            printf("[%s - %d - Line %d]\n", token_type, *(int *)t->data, t->line);
-            break;
-        }
-        case TOKEN_DOUBLE: {
-            printf("[%s - %f - Line %d]", token_type, *(double *)t->data, t->line);
-            break;
-        }
-        case TOKEN_BOOLEAN: {
-            const char *value = *(bool *) t->data ? "#true" : "#false";
-            printf("[%s - %s - Line %d]\n", token_type, value, t->line);
-            break;
-        }
-        case TOKEN_SYMBOL:
-        case TOKEN_KEYWORD:
-            printf("[%s - '%s - Line %d]\n", token_type, (const char *) t->data, t->line);
-            break;
-        case TOKEN_ERROR:
-            printf("[%s - '%s - Line %d]\n", token_type, (const char *) t->data, t->line);
-            break;
-        default:
-            printf("[%s - Line %d]\n", token_type, t->line);
-            break;
+void print_integer(const token_t *t) {
+    printf("[%s - %d - Line %d]\n", token_type_to_string(t->type), *(int *)t->data, t->line);
+}
+
+void print_double(const token_t *t) {
+    printf("[%s - %f - Line %d]\n", token_type_to_string(t->type), *(double *)t->data, t->line);
+}
+
+void print_boolean(const token_t *t) {
+    const char *value = *(bool *)t->data ? "#true" : "#false";
+    printf("[%s - %s - Line %d]\n", token_type_to_string(t->type), value, t->line);
+}
+
+// Add other handlers similarly...
+
+typedef void (*print_handler_t)(const token_t *);
+print_handler_t handlers[] = {
+    [TOKEN_STRING] = print_string,
+    [TOKEN_INTEGER] = print_integer,
+    [TOKEN_DOUBLE] = print_double,
+    [TOKEN_BOOLEAN] = print_boolean,
+    // Add more mappings as needed...
+};
+
+void token_print(const token_t *t) {
+    if (handlers[t->type]) {
+        handlers[t->type](t);
+    } else {
+        printf("[%s - Line %d]\n", token_type_to_string(t->type), t->line);
     }
+}
+
+
+
 }
